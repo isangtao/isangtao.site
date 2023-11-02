@@ -12,18 +12,16 @@ header {
 
 main {
   display: flex;
-  justify-content: center;
   margin-top: 3rem;
   margin-bottom: 3rem;
 }
 
-button {
-  display: block;
+.download-btn-container {
+  justify-content: center;
 }
 
-/*
-.download-btn-container {
-  display: flex;
+.download-btn {
+  display: block;
   flex-direction: column;
   align-items: center;
 }
@@ -37,8 +35,8 @@ button {
   border-radius: 8px;
   text-align: center;
   text-decoration: none;
+  margin: 5px 0;
 }
-*/
 
 footer {
   text-align: center;
