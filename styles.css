@@ -18,6 +18,7 @@ main {
 
 .download-btn-container {
   justify-content: center;
+  align-items: center;
 }
 
 .download-btn {
@@ -36,6 +37,7 @@ main {
   text-align: center;
   text-decoration: none;
   margin: 5px 0;
+  align-items: center;
 }
 
 footer {
