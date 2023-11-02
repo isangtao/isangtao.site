@@ -12,13 +12,16 @@ header {
 
 main {
   display: flex;
-  justify-content: center;
   margin-top: 3rem;
   margin-bottom: 3rem;
 }
 
 .download-btn-container {
-  display: flex;
+  justify-content: center;
+}
+
+.download-btn {
+  display: block;
   flex-direction: column;
   align-items: center;
 }
@@ -32,6 +35,7 @@ main {
   border-radius: 8px;
   text-align: center;
   text-decoration: none;
+  margin: 5px 0;
 }
 
 footer {
