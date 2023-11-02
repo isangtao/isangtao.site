@@ -17,11 +17,6 @@ main {
   margin-bottom: 3rem;
 }
 
-button {
-  display: block;
-}
-
-/*
 .download-btn-container {
   display: flex;
   flex-direction: column;
@@ -38,7 +33,6 @@ button {
   text-align: center;
   text-decoration: none;
 }
-*/
 
 footer {
   text-align: center;
