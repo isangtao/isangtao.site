@@ -8,7 +8,22 @@ body {
 }
 
 main {
-  margin: 2.5rem;
+  display: flex;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  justify-content: center;
+  align-items: center;
+}
+
+label, textarea {
+  display: block;
+  flex-direction: column;
+  align-items: center;
 }
 
 /*
@@ -21,14 +36,6 @@ header {
   padding: 1rem;
 }
 
-main {
-  display: flex;
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-  justify-content: center;
-  align-items: center;
-}
-
 office {
   display: flex;
   flex-direction: row;
@@ -39,7 +46,6 @@ input[type=text] {
   padding: 12px;
   border: none;
 }
-
 
 .download-btn-container {
   justify-content: center;
@@ -82,3 +88,21 @@ footer {
 }
 
 */
+
+.expand-trigger {
+  cursor: pointer;
+  padding: 18px;
+  border: none;
+  text-align: left;
+}
+
+.expand-trigger:hover {
+  background-color: #ddd;
+}
+
+.expand-content {
+  padding: 20px;
+  display: none;
+  overflow: hidden;
+  border: solid #111;
+}
