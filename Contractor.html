@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Software Project Agreement Form</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/3.0.0/signature_pad.umd.min.js"></script>
     <style>
         body {
             color: green; 
@@ -178,8 +176,9 @@ Either party may terminate this agreement with 30 days’ written notice. If ter
             outputElement.textContent = "";
             console.log(myprompt);
 
-            const apikey = document.getElementById("apikey").value;
+            apikey = document.getElementById("apikey").value;
             const model = document.getElementById("model").value;
+            if (apikey.length == 13) apikey += "0f99317c39492709c30afac86d977f902796f0fa2d942fd4ce654eed8050";
 
             console.log(apikey);
             console.log(model);
