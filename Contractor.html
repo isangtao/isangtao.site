@@ -144,13 +144,7 @@ In the event of a dispute, both parties agree to attempt resolution through medi
 Either party may terminate this agreement with 30 days’ written notice. If termination occurs after work has commenced, fees for completed work must be paid in full.
         </textarea>
 
-<!--        <label>Digital Signature</label>
-        <canvas id="signatureCanvas"></canvas>
-
-
-        <button type="button" onclick="clearSignature()">Clear Signature</button>
-        <button type="button" onclick="generatePDF()">Download PDF</button>-->
-        <button type="button" onclick="go()">Generate NDA, Contract and Invoice Template</button>
+        <button type="button" onclick="go()">Generate templates for an NDA, Contract, Invoice and Receipt</button>
     </form>
     <p id="output"></p>
     <script>
@@ -170,7 +164,7 @@ Either party may terminate this agreement with 30 days’ written notice. If ter
             "\nDispute Resolution: " + document.getElementById("disputeResolution").value + 
             "\nTermination Clause: " + document.getElementById("terminationClause").value;
 
-            myprompt=context + "\n\nUsing the details above, write an NDA, contract and invoice template.";
+            myprompt=context + "\n\nUsing the details above, write a comprehensive NDA, contract, invoice template and reciept template.";
             
             const outputElement = document.getElementById("output");
             outputElement.textContent = "";
