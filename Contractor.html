@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Project Agreement Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/3.0.0/signature_pad.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px auto;
+            max-width: 700px;
+            text-align: center;
+            background-color: #000; /* Black background */
+            color: #0f0; /* Green text */
+        }
+        h2 {
+            color: #0f0;
+        }
+        form {
+            background: #111;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+            color: #0f0;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            background-color: #222;
+            color: #0f0;
+        }
+        button {
+            background: #0f0;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #00ff00;
+        }
+        canvas {
+            border: 1px solid #0f0;
+            width: 100%;
+            height: 150px;
+            background-color: #222;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Software Project Agreement Form</h2>
+
+    <form id="agreementForm">
+        <label for="partyA">Party A (Client/Company Name)</label>
+        <input type="text" id="partyA" name="partyA" required>
+
+        <label for="partyB">Party B (Developer/Freelancer Name)</label>
+        <input type="text" id="partyB" name="partyB" required>
+
+        <label for="projectScope">Project Scope</label>
+        <select id="projectScope" name="projectScope">
+            <option>Website</option>
+            <option>Web App</option>
+            <option>Mobile App</option>
+            <option>AI Application</option>
+        </select>
+
+        <label for="deliverables">Deliverables & Milestones</label>
+        <textarea id="deliverables" name="deliverables" rows="3"></textarea>
+
+        <label for="paymentTerms">Payment Terms</label>
+        <textarea id="paymentTerms" name="paymentTerms" rows="3"></textarea>
+
+        <label for="ipOwnership">Intellectual Property (IP) Ownership</label>
+        <select id="ipOwnership" name="ipOwnership">
+            <option>Client owns full rights</option>
+            <option>Shared ownership</option>
+            <option>Developer retains rights</option>
+        </select>
+
+        <label for="confidentiality">Confidentiality Agreement Duration</label>
+        <input type="text" id="confidentiality" name="confidentiality" placeholder="e.g., 2 years">
+
+        <label for="invoiceDetails">Invoice Details</label>
+        <textarea id="invoiceDetails" name="invoiceDetails" rows="3"></textarea>
+
+        <label for="liability">Liability & Indemnification</label>
+        <textarea id="liability" name="liability" rows="3"></textarea>
+
+        <label for="changeManagement">Change Management Process</label>
+        <textarea id="changeManagement" name="changeManagement" rows="3"></textarea>
+
+        <label for="disputeResolution">Dispute Resolution</label>
+        <select id="disputeResolution" name="disputeResolution">
+            <option>Arbitration</option>
+            <option>Mediation</option>
+            <option>Legal Action</option>
+        </select>
+
+        <label for="terminationClause">Termination Clause</label>
+        <textarea id="terminationClause" name="terminationClause" rows="3"></textarea>
+
+        <label>Digital Signature</label>
+        <canvas id="signatureCanvas"></canvas>
+        <button type="button" onclick="clearSignature()">Clear Signature</button>
+
+        <button type="button" onclick="generatePDF()">Download PDF</button>
+    </form>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+        const canvas = document.getElementById('signatureCanvas');
+        const signaturePad = new SignaturePad(canvas);
+
+        function clearSignature() {
+            signaturePad.clear();
+        }
+
+        function generatePDF() {
+            const doc = new jsPDF();
+            doc.text("Software Project Agreement", 20, 20);
+            doc.text("Party A: " + document.getElementById("partyA").value, 20, 40);
+            doc.text("Party B: " + document.getElementById("partyB").value, 20, 50);
+            doc.text("Project Scope: " + document.getElementById("projectScope").value, 20, 60);
+            doc.text("Deliverables & Milestones: " + document.getElementById("deliverables").value, 20, 70);
+            doc.text("Payment Terms: " + document.getElementById("paymentTerms").value, 20, 80);
+            doc.text("IP Ownership: " + document.getElementById("ipOwnership").value, 20, 90);
+            doc.text("Confidentiality Duration: " + document.getElementById("confidentiality").value, 20, 100);
+            doc.text("Invoice Details: " + document.getElementById("invoiceDetails").value, 20, 110);
+            doc.text("Liability & Indemnification: " + document.getElementById("liability").value, 20, 120);
+            doc.text("Change Management: " + document.getElementById("changeManagement").value, 20, 130);
+            doc.text("Dispute Resolution: " + document.getElementById("disputeResolution").value, 20, 140);
+            doc.text("Termination Clause: " + document.getElementById("terminationClause").value, 20, 150);
+
+            if (!signaturePad.isEmpty()) {
+                const signatureImage = signaturePad.toDataURL("image/png");
+                doc.addImage(signatureImage, 'PNG', 20, 160, 100, 40);
+            }
+
+            doc.save("Software_Project_Agreement.pdf");
+        }
+    </script>
+
+</body>
+</html>
