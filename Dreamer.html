@@ -166,9 +166,8 @@
             <div class="top-bar">
                 <button onclick="GenerateStory()">Generate</button>
             </div>
-            <pre id="responseOutput" style="white-space: pre-wrap; word-break: keep-all;">&ltstory&gt
-
-            </pre>
+            &ltstory&gt
+            <pre id="responseOutput" style="white-space: pre-wrap; word-break: keep-all;"></pre>
 
             <div class="footer-instructions">
                 <p>&lt/story&gt
@@ -255,7 +254,7 @@ Using the attached photo(s) of the protagonist, generate 10 images that show the
             outputElement.textContent = "";
             console.log(myprompt);
 
-            const apikey = document.getElementById("apikey").value;
+            apikey = document.getElementById("apikey").value;
             const model = document.getElementById("model").value;
             if (apikey.length == 13) apikey += "0f99317c39492709c30afac86d977f902796f0fa2d942fd4ce654eed8050";
 
