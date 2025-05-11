@@ -112,16 +112,15 @@
         </script>
     </head>
 
-    <body>
-        <h2>Story Teller</h2>
+    <body onload="WriteStory()">
+        <h2>Story Teller (Install Ollama and llama3.2. Set an environment variable OLLAMA_ORIGINS=*)</h2>
         <p class="subtitle">© 2025 Michael Carlos</p>
 
-        <label for="model">Model (Ollama OLLAMA_ORIGINS=*)</label>
-        <input type="text" id="model" value="llama3.2">
+        <input type="text" id="model" value="llama3.2" hidden>
 
-        <h2>Character Details</h2>
+        <h2 hidden>Character Details</h2>
 
-        <form>
+        <form hidden>
 
             <label for="protagonistname">Protagonist's name</label>
             <input type="text" id="protagonistname" value="Michael Carlos">
@@ -179,10 +178,10 @@
         </form>
 
         <p></p>
-        <button onclick="RefreshPlot()">Refresh Plot</button>
-        <textarea id="plot">Michael creates the most advanced combat AI with the ability to learn exponentially.</textarea>
+        <button onclick="RefreshPlot()" hidden>Refresh Plot</button>
+        <textarea id="plot" hidden>Michael creates the most advanced combat AI with the ability to learn exponentially.</textarea>
         
-        <button onclick="WriteStory()">Write Story</button>
+        <button onclick="WriteStory()" hidden>Write Story</button>
         <textarea id="story" rows="50"></textarea>
     </body>
 </html>
