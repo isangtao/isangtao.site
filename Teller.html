@@ -1,65 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>StoryTeller</title>
-    <style>
-        body { color: green; white-space: pre-wrap; word-wrap: break-word; padding: 100px; background-color: black;}
-    </style>
-    <script>
-        // Ensure that there is an environmental variable named "OLLAMA_ORIGINS" with a value of "*" then restart Ollama. [ollama pull llama3.2]
-        myprompt = "Details about the protagonist of a story follows.\nName: Michael Carlos\nEthnicity: Filipino\nGender: Male\nAge: 55\nHeight: 5ft 10in\nInterests: artificial intelligence, robotics, motorcycling, aikido, archery, hiking, kayaking, snorkeling, survival skills, minimalism, resourcefulness, math, physics, biology\nOccupation: AI Researcher and Developer\nCountry of residence: Canada\nCity of residence: Vancouver\nOther: Founded AGI Labs Inc, a company focused on Artificial General Intelligence. He developed a real-time, reinforcement-learning architecture that self-organizes through evolutionary algorithms.\nPlot: Michael creates the first combat AI with the ability to learn exponentially.\n\nIn the style of an action adult novel, write a long story based on the plot. Do not say rain, resonance or echoes. Give the story a happy ending. Set it in a utopian downtown Vancouver in the near future with sunshine and warm weather. Do not address Michael Carlos as Dr. or Mike. Provide no explanation or preamble. Just state the title and jump into the story.\n\n"
-        
-        function speak(text) 
-        {
-            return new Promise((resolve, reject) => 
+    <head>
+        <meta charset="UTF-8">
+        <title>Story Teller</title>
+        <style>
+            body {color: green; padding: 100px; background-color: black}
+            h2 {color: #0f0}
+            form {background: #111; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 255, 0, 0.5)}
+            label {font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; color: #0f0}
+            input, select, textarea {width: 95%; padding: 10px; margin-bottom: 10px; border: 1px solid #0f0; border-radius: 4px; background-color: #222; color: #0f0}
+            button {background: #0f0; color: black; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer}
+            button:hover {background: #00ff00}
+            canvas {border: 1px solid #0f0; width: 100%; height: 150px; background-color: #222}
+            p {white-space: pre-wrap; word-wrap: break-word}
+        </style>
+        <script>
+            // Ensure that Ollama is installed with llama3.2 downloaded and there is an environmental variable named "OLLAMA_ORIGINS" with a value of "*" then restart Ollama.
+            // Voice sounds best in Firefox (Female default) and Edge (Male default)
+
+            function Speak(text) 
             {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.onend = resolve;
-            utterance.onerror = reject;
-            speechSynthesis.speak(utterance);
-            });
-        }
-
-        async function dream() 
-        {
-            const response = await fetch("http://localhost:11434/api/generate", {method: "POST", headers: {"Content-Type": "application/json", "Authorization": "Bearer 1234"}, body: JSON.stringify({model: "llama3.2", prompt: myprompt, stream: true, options: {temperature: 0.9}})});
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            const output = document.getElementById("output");
-            output.innerText = ""; // myprompt;
-            speechtext = "";
-
-            while (true) 
-            {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                const chunk = decoder.decode(value, { stream: true });
-                chunktext = JSON.parse(chunk).response;
-                output.innerText += chunktext;
-                speechtext += chunktext;
-                if (chunktext == ".")
+                return new Promise((resolve, reject) => 
                 {
-                    speak(speechtext);
-                    speechtext = "";
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.onend = resolve;
+                utterance.onerror = reject;
+                speechSynthesis.speak(utterance);
+                });
+            }
+
+            async function RefreshPlot() 
+            {
+                const protagonistname = document.getElementById("protagonistname").value;
+                const ethnicity = document.getElementById("ethnicity").value;
+                const gender = document.getElementById("gender").value;
+                const age = document.getElementById("age").value;
+                const height = document.getElementById("height").value;
+                const interests = document.getElementById("interests").value;
+                const occupation = document.getElementById("occupation").value;
+                const country = document.getElementById("country").value;
+                const city = document.getElementById("city").value;
+                const other = document.getElementById("other").value;
+                const additional = document.getElementById("additional").value;
+                const stylee = document.getElementById("style");
+                var style = stylee.options[stylee.selectedIndex].text;
+                const typee = document.getElementById("type");
+                var type = typee.options[typee.selectedIndex].text;
+                const plot = document.getElementById("plot").value;
+
+                context = "\nDetails about the protagonist of a story follows.\nName: " + protagonistname + "\nEthnicity: " + ethnicity + "\nGender: " + gender + "\nAge: " + age + "\nHeight: " + height + "\nInterests: " + interests + "\nOccupation: " + occupation + "\nCountry of residence: " + country + "\nCity of residence: " + city + "\nOther: " + other;
+
+                myprompt = context + "\n\nProvide an unusual " + type + " plot based on the information above. " + additional + " Don't explain or preamble. Just state the plot summary in one sentence."
+                
+                console.log(myprompt)
+
+                output = document.getElementById("plot");
+
+                Go(myprompt, output, false);
+            }
+
+            async function WriteStory() 
+            {
+                myprompt = "\nDetails about the protagonist of a story follows.\nName: " + document.getElementById("protagonistname").value + "\nEthnicity: " + document.getElementById("ethnicity").value + "\nGender: " + document.getElementById("gender").value + "\nAge: " + document.getElementById("age").value + "\nHeight: " + document.getElementById("height").value + "\nInterests: " + document.getElementById("interests").value + "\nOccupation: " + document.getElementById("occupation").value + "\nCountry of residence: " + document.getElementById("country").value + "\nCity of residence: " + document.getElementById("city").value + "\nOther: " + document.getElementById("other").value + "\nPlot: " + document.getElementById("plot").value + "\n\nIn the style of a " + document.getElementById("type").options[document.getElementById("type").selectedIndex].text + " " + document.getElementById("style").options[document.getElementById("style").selectedIndex].text + ", write a long story based on the plot. " + document.getElementById("additional").value + " Do not use markdown. Provide no explanation or preamble. Just state the title and jump into the story.\n\n";
+
+                console.log(myprompt)
+
+                output = document.getElementById("story");
+
+                Go(myprompt, output, true);
+            }
+
+            function Wrap()
+            {
+                output = document.getElementById("story");
+
+                output.textContent = "<story>\n\n" + output.textContent + "\n\n</story>\n\nUsing the attached photo(s) of the protagonist, generate 10 images that show the important moments of the story above. Do not include text. Do not depict children. If you can't generate an image, skip that part of the story and generate the next image."; // Use this prompt to generate images at https://copilot.microsoft.com/ or https://aistudio.google.com/
+                output.style.height = "auto";
+                output.style.height = (output.scrollHeight) + "px";
+            }
+
+            async function Go(myprompt, output, voiceflag)
+            {
+                const model = document.getElementById("model").value;
+
+                const response = await fetch("http://localhost:11434/api/generate", {method: "POST", headers: {"Content-Type": "application/json", "Authorization": "Bearer 1234"}, body: JSON.stringify({model: "llama3.2", prompt: myprompt, stream: true, options: {temperature: 0.9}})});
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                output.innerText = "";
+                speechtext = "";
+
+                while (true) 
+                {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    chunktext = JSON.parse(chunk).response;
+                    output.textContent += chunktext;
+                    //output.style.height = "auto";
+                    //output.style.height = (output.scrollHeight) + "px";
+                    speechtext += chunktext;
+                    if (chunktext == "." && voiceflag == true)
+                    {
+                        Speak(speechtext);
+                        speechtext = "";
+                    }
                 }
             }
-        }
 
-        function play()
-        {
-            speech = new SpeechSynthesisUtterance();
-            speech.text = output.innerText;
-            window.speechSynthesis.speak(speech);
-        }
+        </script>
+    </head>
+
+    <body>
+        <h2>Story Teller</h2>
+        <p class="subtitle">© 2025 Michael Carlos</p>
+
+        <label for="model">Model (Ollama OLLAMA_ORIGINS=*)</label>
+        <input type="text" id="model" value="llama3.2">
+
+        <h2>Character Details</h2>
+
+        <form>
+
+            <label for="protagonistname">Protagonist's name</label>
+            <input type="text" id="protagonistname" value="Michael Carlos">
+            
+            <label for="ethnicity">Ethnicity</label>
+            <input type="text" id="ethnicity" value="Filipino">
+            
+            <label for="gender">Gender</label>
+            <input type="text" id="gender" value="Male">
+            
+            <label for="age">Age</label>
+            <input type="number" id="age" value="55">
+            
+            <label for="height">Height</label>
+            <input type="text" id="height" value="5ft 10in">
+            
+            <label for="interests">Interests</label>
+            <input type="text" id="interests" value="artificial intelligence, robotics, motorcycling (CBR600RR), skateboarding, aikido, archery, hiking, kayaking, snorkeling, survival skills, minimalism, multi-dimensional math, astrophysics, genetics">
+            
+            <label for="occupation">Occupation</label>
+            <input type="text" id="occupation" value="AI Researcher and Developer">
         
-    </script>
-</head>
-<body onload="dream()">
-    <b>This runs from your local Ollama installation using Llama3.2. Ensure that there is an environmental variable named "OLLAMA_ORIGINS" with a value of "*" then restart Ollama.</b>
-    <!--<button onclick="play()">></button>-->
-    <p id="output"></p>
-</body>
+            <label for="country">Country of residence</label>
+            <input type="text" id="country" value="Canada">
+            
+            <label for="city">City of residence</label>
+            <input type="text" id="city" value="Vancouver">
+            
+            <label for="other">Other</label>
+            <textarea id="other" rows="3">Founded AGI Labs Inc, a company focused on Artificial General Intelligence. He developed a real-time, reinforcement-learning architecture that self-organizes through evolutionary algorithms.</textarea>
+            
+            <label for="additional">Additional Instructions</label>
+            <textarea id="additional" rows="3">Do not mention rain, resonance, echo, echoes or elysium. Set it in a semi-utopian Vancouver in the near future with sunshine and warm weather. Do not address Michael Carlos as Dr or Mike.</textarea>
+            
+            <label for="style">Style</label>
+            <select id="style">
+                <option selected>Adult novel</option>
+                <option>Teen adventure</option>
+                <option>Childrens' book</option>
+                <!-- Add other options if known -->
+            </select>
+            
+            <label for="type">Type</label>
+            <select id="type">
+                <option selected>Science fiction</option>
+                <option>Action</option>
+                <option>Suspense</option>
+                <option>Thriller</option>
+                <option>Adventure</option>
+                <option>Fantasy</option>
+                <option>Horror</option>
+                <option>Mystery</option>
+            </select>
+            
+        </form>
+
+        <p></p>
+        <button onclick="RefreshPlot()">Refresh Plot</button>
+        <textarea id="plot">Michael creates the most advanced combat AI with the ability to learn exponentially.</textarea>
+        
+        <button onclick="WriteStory()">Write Story</button>
+        <textarea id="story" rows="50"></textarea>
+    </body>
 </html>
