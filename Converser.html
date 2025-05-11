@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        #transcript { border: 1px solid #ccc; padding: 10px; margin-top: 20px; min-height: 50px; }
+    </style>
+</head>
+<body>
+    <h1>Speech to Text</h1>
+    <p>Start speaking and your words will appear below:</p>
+    <div id="transcript"></div>
+
+    <script>
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        if (window.SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            let silenceTimer;
+
+            recognition.onresult = (event) => {
+                clearTimeout(silenceTimer); // Reset silence timer on new input
+
+                let transcript = '';
+                for (let i = 0; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                document.getElementById('transcript').innerText = transcript;
+
+                // Start silence timer
+                silenceTimer = setTimeout(() => {
+                    document.getElementById('transcript').innerText = ''; // Clear transcript
+                    recognition.abort(); // Fully reset recognition instance
+                    recognition.start(); // Restart fresh
+                }, 2000);
+            };
+
+            recognition.onend = () => {
+                recognition.start(); // Restart recognition automatically
+            };
+
+            recognition.start();
+        } else {
+            alert("Your browser does not support Speech Recognition.");
+        }
+    </script>
+</body>
+</html>
