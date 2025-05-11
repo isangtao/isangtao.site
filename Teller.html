@@ -98,8 +98,8 @@
                     const chunk = decoder.decode(value, { stream: true });
                     chunktext = JSON.parse(chunk).response;
                     output.textContent += chunktext;
-                    //output.style.height = "auto";
-                    //output.style.height = (output.scrollHeight) + "px";
+                    output.style.height = "auto";
+                    output.style.height = (output.scrollHeight) + "px";
                     speechtext += chunktext;
                     if (chunktext == "." && voiceflag == true)
                     {
