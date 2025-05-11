@@ -58,128 +58,8 @@
             word-wrap: break-word; 
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="sidebar">
-            <h2>Dreamer</h2>
-            <p class="subtitle">© 2025 Michael Carlos</p>
 
-            <div class="form-group">
-                <label for="apikey">OpenRouter API Key</label>
-                <input type="text" id="apikey" value="sk-or-v1-">
-            </div>            
-            
-            <div class="form-group">
-                <label for="model">Model</label>
-                <input type="text" id="model" value="google/gemini-2.0-flash-exp:free">
-            </div>
-
-            <div class="form-group">
-                <label for="protagonistname">Protagonist's name</label>
-                <input type="text" id="protagonistname" value="Brian">
-            </div>
-
-            <div class="form-group">
-                <label for="ethnicity">Ethnicity</label>
-                <input type="text" id="ethnicity" value="Ukranian">
-            </div>
-
-            <div class="form-group">
-                <label for="gender">Gender</label>
-                <input type="text" id="gender" value="Male">
-            </div>
-
-            <div class="form-group">
-                <label for="age">Age</label>
-                <input type="number" id="age" value="53">
-            </div>
-
-            <div class="form-group">
-                <label for="height">Height</label>
-                <input type="text" id="height" value="5ft 10in">
-            </div>
-
-            <div class="form-group">
-                <label for="interests">Interests</label>
-                <input type="text" id="interests" value="mountaineering, hiking, kayaking, spelunking, scuba diving">
-            </div>
-
-            <div class="form-group">
-                <label for="occupation">Occupation</label>
-                <input type="text" id="occupation" value="Director of Product">
-            </div>
-
-            <div class="form-group">
-                <label for="country">Country of residence</label>
-                <input type="text" id="country" value="Canada">
-            </div>
-
-            <div class="form-group">
-                <label for="city">City of residence</label>
-                <input type="text" id="city" value="Vancouver">
-            </div>
-
-             <div class="form-group">
-                <label for="other">Other</label>
-                <textarea id="other" rows="3">Brian specializes in productizing medical equipment. He enjoys eating all kinds of cuisine. One of his closest friends is Michael, who is a Filipino-Canadian and specializes in AI research. They both have lived in Canada all their lives and have known each other since grade 3.</textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="additional">Additional Instructions</label>
-                <textarea id="additional" rows="3">Give the story a happy ending. Set it in a utopian downtown Vancouver in the near future with sunshine and warm weather.</textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="style">Style</label>
-                <select id="style">
-                    <option selected>Adult novel</option>
-                    <option>Teen adventure</option>
-                    <option>Childrens' book</option>
-                    <!-- Add other options if known -->
-                </select>
-            </div>
-
-             <div class="form-group">
-                <label for="type">Type</label>
-                <select id="type">
-                    <option selected>Adventure</option>
-                    <option>Science fiction</option>
-                    <option>Suspense</option>
-                    <option>Thriller</option>
-                    <option>Action</option>
-                    <option>Fantasy</option>
-                    <option>Horror</option>
-                    <option>Mystery</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <button onclick="GeneratePlot()">New Plot</button>
-                <label for="plot">Plot</label>
-                <textarea id="plot" rows="5">(Click 'New Plot' or provide your own.)</textarea>
-            </div>
-
-        </div>
-
-        <div class="main-content">
-            <div class="top-bar">
-                <button onclick="GenerateStory()">Generate</button>
-            </div>
-            &ltstory&gt
-            <pre id="responseOutput" style="white-space: pre-wrap; word-break: keep-all;"></pre>
-
-            <div class="footer-instructions">
-                <p>&lt/story&gt
-
-Using the attached photo(s) of the protagonist, generate 10 images that show the important moments of the story above. Do not include text. Do not depict children. If you can't generate an image, skip that part of the story and generate the next image.
-Ref: https://copilot.microsoft.com/ or https://aistudio.google.com/</a></p>
-                 <p style="text-align: right; color: #666; font-size: 0.8em; margin-top:10px;">1080 x 1885</p>
-            </div>
-        </div>
-    </div>
-
-    <script>
+        <script>
 
         async function GeneratePlot() 
         {
@@ -293,7 +173,86 @@ Ref: https://copilot.microsoft.com/ or https://aistudio.google.com/</a></p>
                     }
                 });
             }
+            outputElement.textContent = "<story>\n\n" + outputElement.textContent;
+            outputElement.textContent += "\n\n</story>\n\nUsing the attached photo(s) of the protagonist, generate 10 images that show the important moments of the story above. Do not include text. Do not depict children. If you can't generate an image, skip that part of the story and generate the next image."; // Use this prompt to generate images at https://copilot.microsoft.com/ or https://aistudio.google.com/
         }
     </script>
-</body>
+</head>
+    <body>
+        <h2>Dreamer</h2>
+        <p class="subtitle">© 2025 Michael Carlos</p>
+
+        <label for="apikey">OpenRouter API Key</label>
+        <input type="text" id="apikey" value="sk-or-v1-">
+        
+        <label for="model">Model</label>
+        <input type="text" id="model" value="google/gemini-2.0-flash-exp:free">
+
+        <h2>Character Details</h2>
+
+        <form>
+
+            <label for="protagonistname">Protagonist's name</label>
+            <input type="text" id="protagonistname" value="Brian">
+            
+            <label for="ethnicity">Ethnicity</label>
+            <input type="text" id="ethnicity" value="Ukranian">
+            
+            <label for="gender">Gender</label>
+            <input type="text" id="gender" value="Male">
+            
+            <label for="age">Age</label>
+            <input type="number" id="age" value="53">
+            
+            <label for="height">Height</label>
+            <input type="text" id="height" value="5ft 10in">
+            
+            <label for="interests">Interests</label>
+            <input type="text" id="interests" value="mountaineering, hiking, kayaking, spelunking, scuba diving">
+            
+            <label for="occupation">Occupation</label>
+            <input type="text" id="occupation" value="Director of Product">
+        
+            <label for="country">Country of residence</label>
+            <input type="text" id="country" value="Canada">
+            
+            <label for="city">City of residence</label>
+            <input type="text" id="city" value="Vancouver">
+            
+            <label for="other">Other</label>
+            <textarea id="other" rows="3">Brian specializes in productizing medical equipment. He enjoys eating all kinds of cuisine. One of his closest friends is Michael, who is a Filipino-Canadian and specializes in AI research. They both have lived in Canada all their lives and have known each other since grade 3.</textarea>
+            
+            <label for="additional">Additional Instructions</label>
+            <textarea id="additional" rows="3">Give the story a happy ending. Set it in a utopian downtown Vancouver in the near future with sunshine and warm weather.</textarea>
+            
+            <label for="style">Style</label>
+            <select id="style">
+                <option selected>Adult novel</option>
+                <option>Teen adventure</option>
+                <option>Childrens' book</option>
+                <!-- Add other options if known -->
+            </select>
+            
+            <label for="type">Type</label>
+            <select id="type">
+                <option selected>Adventure</option>
+                <option>Science fiction</option>
+                <option>Suspense</option>
+                <option>Thriller</option>
+                <option>Action</option>
+                <option>Fantasy</option>
+                <option>Horror</option>
+                <option>Mystery</option>
+            </select>
+            
+        </form>
+
+        <p></p>
+        <button onclick="GeneratePlot()">New Plot</button>
+        <textarea id="plot" rows="5">(Click 'New Plot' or provide your own.)</textarea>
+        
+        <button onclick="GenerateStory()">Write Story</button>
+        <textarea id="responseOutput" rows="120"></textarea>
+
+    </body>
 </html>
