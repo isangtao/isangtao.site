@@ -17,7 +17,7 @@
             </style>
     </head>
     <body onload="Chat()">
-        <h1>STS</h1>
+        <h1>Converser</h1>
         <p id="prompt"></p>
         <p id="response"></p>
         <script>            
@@ -52,7 +52,7 @@
                         silenceTimer = setTimeout(() => 
                         {
                             if (typeof controller !== 'undefined') controller.abort();
-                            speechSynthesis.cancel();
+                            for (let k = 0; k < 100; k++) speechSynthesis.cancel();
                             Go(myprompt, response, true);
                             myprompt = '';
                             j = event.results.length;
