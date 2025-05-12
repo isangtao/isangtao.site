@@ -52,7 +52,7 @@
                         silenceTimer = setTimeout(() => 
                         {
                             if (typeof controller !== 'undefined') controller.abort();
-                            Go(myprompt, response, true);
+                            Go(myprompt, response, false);
                             myprompt = '';
                             j = event.results.length;
                         }, 1000);
