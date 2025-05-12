@@ -83,6 +83,9 @@
         <label for="partyB">Party B (Developer/Freelancer Name)</label>
         <input type="text" id="partyB" name="partyB" value="Michael Carlos / AGI Labs Inc." required>
 
+        <label for="jurisdiction">Jurisdiction</label>
+        <input type="text" id="jurisdiction" name="jurisdiction" value="British Columbia, Canada">
+        
         <label for="projectScope">Project Scope</label>
         <select id="projectScope" name="projectScope">
             <option>Website</option>
@@ -158,6 +161,7 @@ Either party may terminate this agreement with 30 days’ written notice. If ter
             context="Software Project Agreement\n" + 
             "\nParty A (Client): " + document.getElementById("partyA").value + 
             "\nParty B (Developer): " + document.getElementById("partyB").value + 
+            "\nJurisdiction: " + document.getElementById("jurisdiction").value + 
             "\nProject Scope: " + document.getElementById("projectScope").value + 
             "\nDeliverables & Milestones: " + document.getElementById("deliverables").value + 
             "\nPayment Terms: " + document.getElementById("paymentTerms").value + 
