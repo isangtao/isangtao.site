@@ -117,8 +117,13 @@
     <p class="subtitle">© 2025 Michael Carlos</p>
     <label for="apikey">OpenRouter API Key</label>
     <input type="text" id="apikey" value="sk-or-v1-">
-    <label for="model">Model</label>
-    <input type="text" id="model" value="google/gemini-2.0-flash-exp:free">
+    <label for="model">Model</label>        
+    <select id="model">
+        <option selected>google/gemma-3-27b-it:free</option>
+        <option>meta-llama/llama-4-maverick:free</option>
+        <option>meta-llama/llama-4-scout:free</option>
+        <option>google/gemini-2.0-flash-exp:free</option>
+    </select>
     <textarea id="cv" rows="150">
 Michael Carlos
 https://ca.linkedin.com/in/mcarlos
