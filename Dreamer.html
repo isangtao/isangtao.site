@@ -136,7 +136,9 @@
             console.log(myprompt);
 
             apikey = document.getElementById("apikey").value;
-            const model = document.getElementById("model").value;
+            const modele = document.getElementById("model");
+            var model = modele.options[modele.selectedIndex].text;
+            
             if (apikey.length == 13) apikey += "0f99317c39492709c30afac86d977f902796f0fa2d942fd4ce654eed8050";
 
             const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -186,8 +188,13 @@
         <input type="text" id="apikey" value="sk-or-v1-">
         
         <label for="model">Model</label>
-        <input type="text" id="model" value="google/gemini-2.0-flash-exp:free">
-
+        <select id="model">
+            <option selected>google/gemma-3-27b-it:free</option>
+            <option>meta-llama/llama-4-maverick:free</option>
+            <option>meta-llama/llama-4-scout:free</option>
+            <option>google/gemini-2.0-flash-exp:free</option>
+        </select>
+        
         <h2>Character Details</h2>
 
         <form>
