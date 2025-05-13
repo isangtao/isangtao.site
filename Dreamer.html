@@ -55,7 +55,7 @@
         <input type="text" id="city" value="Vancouver">
         
         <label for="other">Other</label>
-        <textarea id="other" rows="3">Brian specializes in productizing high-technology equipment. He enjoys global cuisine. One of his closest friends is Michael, who is a bald, muscular Filipino-mestizo and specializes in AI research. They both have lived in Canada all their lives and have known each other since grade 3.</textarea>
+        <textarea id="other" rows="3">Brian specializes in productizing high-technology equipment. He enjoys global cuisine.</textarea>
         
         <label for="additional">Additional Instructions</label>
         <textarea id="additional" rows="3">Give the story a happy ending. Set it in a utopian downtown Vancouver in the near future with sunshine and warm weather.</textarea>
@@ -98,6 +98,8 @@
 
     async function GeneratePlot() 
     {
+      document.getElementById("plot").textContent = "";
+
       const seed = document.getElementById("seed").value;
       const protagonistname = document.getElementById("protagonistname").value;
       const ethnicity = document.getElementById("ethnicity").value;
@@ -126,6 +128,8 @@
 
     function GenerateStory()
     {
+      document.getElementById("responseOutput").textContent = "";
+
       const seed = document.getElementById("seed").value;
       const protagonistname = document.getElementById("protagonistname").value;
       const ethnicity = document.getElementById("ethnicity").value;
