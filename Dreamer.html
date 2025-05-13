@@ -20,10 +20,6 @@
       <h2>Character Details</h2>
 
       <form>
-
-        <label for="seed">Seed</label>
-        <input type="text" id="seed" value="123">
-
         <label for="protagonistname">Protagonist's name</label>
         <input type="text" id="protagonistname" value="Brian">
 
@@ -99,8 +95,8 @@
     async function GeneratePlot() 
     {
       document.getElementById("plot").textContent = "";
+      document.getElementById("plot").rows = 3;
 
-      const seed = document.getElementById("seed").value;
       const protagonistname = document.getElementById("protagonistname").value;
       const ethnicity = document.getElementById("ethnicity").value;
       const gender = document.getElementById("gender").value;
@@ -118,19 +114,21 @@
       var type = typee.options[typee.selectedIndex].text;
       document.getElementById("plot").textContent = "";
 
-      context = "\nSeed: " + seed + "\n\nDetails about the protagonist of a story follows.\nName: " + protagonistname + "\nEthnicity: " + ethnicity + "\nGender: " + gender + "\nAge: " + age + "\nHeight: " + height + "\nInterests: " + interests + "\nOccupation: " + occupation + "\nCountry of residence: " + country + "\nCity of residence: " + city + "\nOther: " + other;
+      context = "\n\nDetails about the protagonist of a story follows.\nName: " + protagonistname + "\nEthnicity: " + ethnicity + "\nGender: " + gender + "\nAge: " + age + "\nHeight: " + height + "\nInterests: " + interests + "\nOccupation: " + occupation + "\nCountry of residence: " + country + "\nCity of residence: " + city + "\nOther: " + other;
 
-      myprompt = context + "\n\nProvide an unusual " + type + " plot based on the information above. " + additional + " Don't explain or preamble. Just state the plot summary in one sentence."
-        
+      myprompt = context + "\n\nProvide an unusual " + type + " plot based on the information above. " + additional + " Don't explain or preamble. Just state the plot summary in one sentence."  + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+      
+      console.log(myprompt);
+
       streamChatCompletion([{ role: "user", content: myprompt }], { model: "openai" }, handleChunkPlot);
     }
 
 
-    function GenerateStory()
+    async function GenerateStory()
     {
       document.getElementById("responseOutput").textContent = "";
+      document.getElementById("responseOutput").rows = 3;
 
-      const seed = document.getElementById("seed").value;
       const protagonistname = document.getElementById("protagonistname").value;
       const ethnicity = document.getElementById("ethnicity").value;
       const gender = document.getElementById("gender").value;
@@ -148,9 +146,11 @@
       var type = typee.options[typee.selectedIndex].text;
       const plot = document.getElementById("plot").value;
 
-      context = "\n\nSeed: " + seed + "\n\nDetails about the protagonist of a story follows.\nName: " + protagonistname + "\nEthnicity: " + ethnicity + "\nGender: " + gender + "\nAge: " + age + "\nHeight: " + height + "\nInterests: " + interests + "\nOccupation: " + occupation + "\nCountry of residence: " + country + "\nCity of residence: " + city + "\nOther: " + other + "\nPlot: " + plot;
+      context = "\n\nDetails about the protagonist of a story follows.\nName: " + protagonistname + "\nEthnicity: " + ethnicity + "\nGender: " + gender + "\nAge: " + age + "\nHeight: " + height + "\nInterests: " + interests + "\nOccupation: " + occupation + "\nCountry of residence: " + country + "\nCity of residence: " + city + "\nOther: " + other + "\nPlot: " + plot;
 
-      myprompt = context + "\n\nIn the style of a " + type + " " + style + ", write a long story based on the plot. " + additional + " Do not use markdown. Provide no explanation or preamble. Just state the title and jump into the story. After, provide 10 very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Repeat full visual descriptions of each character rather than names or the word protagonist in each image prompt. Do not number the image prompts.\n\n";
+      myprompt = context + "\n\nIn the style of a " + type + " " + style + ", write a long story based on the plot. " + additional + " Do not use markdown. Provide no explanation or preamble. Just state the title and jump into the story. After, provide 10 very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Repeat full visual descriptions of each character rather than names or the word protagonist in each image prompt. Do not number the image prompts." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+
+      console.log(myprompt);
 
       streamChatCompletion([{ role: "user", content: myprompt}], { model: "openai" }, handleChunkStory);
     }
@@ -251,7 +251,7 @@
 
     function Imagine()
     {
-        document.getElementById("imglink").src = "https://image.pollinations.ai/prompt/" + document.getElementById("prompt").value + "&nologo=true";
+        document.getElementById("imglink").src = "https://image.pollinations.ai/prompt/" + document.getElementById("prompt").value  + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
     }
         
   </script>
