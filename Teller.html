@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
-        <meta charset="UTF-8">
-        <title>Story Teller</title>
+        <title>Converser</title>
         <style>
             body {color: green; padding: 100px; background-color: black}
             h2 {color: #0f0}
@@ -14,174 +12,138 @@
             canvas {border: 1px solid #0f0; width: 100%; height: 150px; background-color: #222}
             p {white-space: pre-wrap; word-wrap: break-word}
         </style>
-        <script>
-            // Ensure that Ollama is installed with llama3.2 downloaded and there is an environmental variable named "OLLAMA_ORIGINS" with a value of "*" then restart Ollama.
-            // Voice sounds best in Firefox (Female default) and Edge (Male default)
+    </head>
+    <body onload="Go()">
+        <textarea id="prompt" hidden>
+Details about the protagonist of a story follows.
+Name: Michael Carlos
+Description: bald athletic Filipino-mestizo who typically wears a black button-up shirt, jeans with a leather belt and black boots where appropriate.
+Gender: Male
+Age: 55
+Height: 5ft 10in
+Interests: artificial intelligence, robotics, motorcycling (CBR600RR), skateboarding, aikido, archery, hiking, kayaking, snorkeling, survival skills, minimalism, multi-dimensional math, astrophysics, genetics
+Occupation: AI Researcher and Developer
+Country of residence: Canada
+City of residence: Vancouver
+Other: Founded AGI Labs Inc, a company focused on Artificial General Intelligence. He developed a real-time, reinforcement-learning architecture that self-organizes through evolutionary algorithms.
+Plot: Michael creates the most advanced combat AI with the ability to learn exponentially.
 
-            function Speak(text) 
+In the style of an adventure adult novel, write a long story based on the plot. Do not mention rain, resonance, echo, echoes or elysium. Set it in a semi-utopian Vancouver in the near future with sunshine and warm weather. Depict AI as childlike, caring and decent. Do not address Michael Carlos as Dr or Mike. Do not use markdown. Provide no explanation or preamble. Just state the title and jump into the story. After, provide 10 very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Repeat full visual descriptions of each character rather than names or the word protagonist in each image prompt. Do not number the image prompts.
+        </textarea>
+        <p id="response"></p>
+        
+    </body>
+    <script>
+        speechtext = "";
+
+        function Speak(text) 
+        {
+            return new Promise((resolve, reject) => 
             {
-                return new Promise((resolve, reject) => 
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.onend = resolve;
+            utterance.onerror = reject;
+            speechSynthesis.speak(utterance);
+            });
+        }
+
+        function Go()
+        {
+            myprompt = document.getElementById("prompt").textContent + "\nSeed: " + Math.floor(Math.random() * 999999999);
+            console.log(myprompt);
+            streamChatCompletion([{ role: "user", content: myprompt}], { model: "openai" }, handleChunk);
+        }
+
+        async function streamChatCompletion(messages, options = {}, onChunkReceived) 
+        {
+            const url = "https://text.pollinations.ai/openai";
+            const payload = 
+            {
+                model: options.model || "openai",
+                messages: messages,
+                seed: options.seed,
+                stream: true, // Enable streaming
+            };
+
+            try {
+                const response = await fetch(url, {
+                method: "POST",
+                headers: 
                 {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.onend = resolve;
-                utterance.onerror = reject;
-                speechSynthesis.speak(utterance);
+                    "Content-Type": "application/json",
+                    Accept: "text/event-stream",
+                },
+                body: JSON.stringify(payload),
                 });
-            }
 
-            async function RefreshPlot() 
-            {
-                const protagonistname = document.getElementById("protagonistname").value;
-                const ethnicity = document.getElementById("ethnicity").value;
-                const gender = document.getElementById("gender").value;
-                const age = document.getElementById("age").value;
-                const height = document.getElementById("height").value;
-                const interests = document.getElementById("interests").value;
-                const occupation = document.getElementById("occupation").value;
-                const country = document.getElementById("country").value;
-                const city = document.getElementById("city").value;
-                const other = document.getElementById("other").value;
-                const additional = document.getElementById("additional").value;
-                const stylee = document.getElementById("style");
-                var style = stylee.options[stylee.selectedIndex].text;
-                const typee = document.getElementById("type");
-                var type = typee.options[typee.selectedIndex].text;
-                const plot = document.getElementById("plot").value;
-
-                context = "\nDetails about the protagonist of a story follows.\nName: " + protagonistname + "\nEthnicity: " + ethnicity + "\nGender: " + gender + "\nAge: " + age + "\nHeight: " + height + "\nInterests: " + interests + "\nOccupation: " + occupation + "\nCountry of residence: " + country + "\nCity of residence: " + city + "\nOther: " + other;
-
-                myprompt = context + "\n\nProvide an unusual " + type + " plot based on the information above. " + additional + " Don't explain or preamble. Just state the plot summary in one sentence."
-                
-                console.log(myprompt)
-
-                output = document.getElementById("plot");
-
-                Go(myprompt, output, false);
-            }
-
-            async function WriteStory() 
-            {
-                myprompt = "\nDetails about the protagonist of a story follows.\nName: " + document.getElementById("protagonistname").value + "\nEthnicity: " + document.getElementById("ethnicity").value + "\nGender: " + document.getElementById("gender").value + "\nAge: " + document.getElementById("age").value + "\nHeight: " + document.getElementById("height").value + "\nInterests: " + document.getElementById("interests").value + "\nOccupation: " + document.getElementById("occupation").value + "\nCountry of residence: " + document.getElementById("country").value + "\nCity of residence: " + document.getElementById("city").value + "\nOther: " + document.getElementById("other").value + "\nPlot: " + document.getElementById("plot").value + "\n\nIn the style of a " + document.getElementById("type").options[document.getElementById("type").selectedIndex].text + " " + document.getElementById("style").options[document.getElementById("style").selectedIndex].text + ", write a long story based on the plot. " + document.getElementById("additional").value + " Do not use markdown. Provide no explanation or preamble. Just state the title and jump into the story.\n\n";
-
-                console.log(myprompt)
-
-                output = document.getElementById("story");
-
-                Go(myprompt, output, true);
-            }
-
-            function Wrap()
-            {
-                output = document.getElementById("story");
-
-                output.textContent = "<story>\n\n" + output.textContent + "\n\n</story>\n\nUsing the attached photo(s) of the protagonist, generate 10 images that show the important moments of the story above. Do not include text. Do not depict children. If you can't generate an image, skip that part of the story and generate the next image."; // Use this prompt to generate images at https://copilot.microsoft.com/ or https://aistudio.google.com/
-                output.style.height = "auto";
-                output.style.height = (output.scrollHeight) + "px";
-            }
-
-            async function Go(myprompt, output, voiceflag)
-            {
-                const model = document.getElementById("model").value;
-
-                const response = await fetch("http://localhost:11434/api/generate", {method: "POST", headers: {"Content-Type": "application/json", "Authorization": "Bearer 1234"}, body: JSON.stringify({model: "llama3.2", prompt: myprompt, stream: true, options: {temperature: 0.9}})});
+                if (!response.ok) 
+                {
+                const errorText = await response.text();
+                throw new Error(
+                    `HTTP error! status: ${response.status}, message: ${errorText}`
+                );
+                }
 
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
-                output.innerText = "";
-                speechtext = "";
+                let buffer = "";
 
-                while (true) 
+                console.log("Starting stream...");
+
+                while (true) {
+                const { done, value } = await reader.read();
+                if (done) 
                 {
-                    const { done, value } = await reader.read();
-                    if (done) break;
+                    console.log("Stream finished.");
+                    break;
+                }
 
-                    const chunk = decoder.decode(value, { stream: true });
-                    chunktext = JSON.parse(chunk).response;
-                    output.textContent += chunktext;
-                    output.style.height = "auto";
-                    output.style.height = (output.scrollHeight) + "px";
-                    speechtext += chunktext;
-                    if (chunktext == "." && voiceflag == true)
+                buffer += decoder.decode(value, { stream: true });
+
+                // Process buffer line by line (SSE format: data: {...}\n\n)
+                const lines = buffer.split("\n\n");
+                buffer = lines.pop(); // Keep the potentially incomplete last line
+
+                for (const line of lines) 
+                {
+                    if (line.startsWith("data: ")) 
                     {
-                        Speak(speechtext);
-                        speechtext = "";
+                    const dataStr = line.substring(6).trim();
+                    if (dataStr === "[DONE]") {
+                        console.log("Received [DONE] marker.");
+                        continue; // Or handle end of stream signal
+                    }
+                    try 
+                    {
+                        const chunk = JSON.parse(dataStr);
+                        const content = chunk?.choices?.[0]?.delta?.content;
+                        if (content && onChunkReceived) 
+                        {
+                        onChunkReceived(content); // Callback to handle the text chunk
+                        }
+                    } catch (e) {
+                        console.error("Failed to parse stream chunk:", dataStr, e);
+                    }
                     }
                 }
             }
+        } 
+        catch (error) 
+        {
+            console.error("Error during streaming chat completion:", error);
+        }
+        }
 
-        </script>
-    </head>
-
-    <body onload="WriteStory()">
-        <h2>Story Teller</h2>
-        <p class="subtitle">© 2025 Michael Carlos</p>
-        <p class="subtitle">(Set an environment variable OLLAMA_ORIGINS=*, then install Ollama and llama3.2)</p>
-        <input type="text" id="model" value="llama3.2" hidden>
-
-        <h2 hidden>Character Details</h2>
-
-        <form hidden>
-
-            <label for="protagonistname">Protagonist's name</label>
-            <input type="text" id="protagonistname" value="Michael Carlos">
-            
-            <label for="ethnicity">Ethnicity</label>
-            <input type="text" id="ethnicity" value="Filipino">
-            
-            <label for="gender">Gender</label>
-            <input type="text" id="gender" value="Male">
-            
-            <label for="age">Age</label>
-            <input type="number" id="age" value="55">
-            
-            <label for="height">Height</label>
-            <input type="text" id="height" value="5ft 10in">
-            
-            <label for="interests">Interests</label>
-            <input type="text" id="interests" value="artificial intelligence, robotics, motorcycling (CBR600RR), skateboarding, aikido, archery, hiking, kayaking, snorkeling, survival skills, minimalism, multi-dimensional math, astrophysics, genetics">
-            
-            <label for="occupation">Occupation</label>
-            <input type="text" id="occupation" value="AI Researcher and Developer">
-        
-            <label for="country">Country of residence</label>
-            <input type="text" id="country" value="Canada">
-            
-            <label for="city">City of residence</label>
-            <input type="text" id="city" value="Vancouver">
-            
-            <label for="other">Other</label>
-            <textarea id="other" rows="3">Founded AGI Labs Inc, a company focused on Artificial General Intelligence. He developed a real-time, reinforcement-learning architecture that self-organizes through evolutionary algorithms.</textarea>
-            
-            <label for="additional">Additional Instructions</label>
-            <textarea id="additional" rows="3">Do not mention rain, resonance, echo, echoes or elysium. Set it in a semi-utopian Vancouver in the near future with sunshine and warm weather. Depict AI as childlike, caring and decent. Do not address Michael Carlos as Dr or Mike.</textarea>
-            
-            <label for="style">Style</label>
-            <select id="style">
-                <option selected>Adult novel</option>
-                <option>Teen adventure</option>
-                <option>Childrens' book</option>
-                <!-- Add other options if known -->
-            </select>
-            
-            <label for="type">Type</label>
-            <select id="type">
-                <option selected>Science fiction</option>
-                <option>Action</option>
-                <option>Suspense</option>
-                <option>Thriller</option>
-                <option>Adventure</option>
-                <option>Fantasy</option>
-                <option>Horror</option>
-                <option>Mystery</option>
-            </select>
-            
-        </form>
-
-        <p></p>
-        <button onclick="RefreshPlot()" hidden>Refresh Plot</button>
-        <textarea id="plot" hidden>Michael creates the most advanced combat AI with the ability to learn exponentially.</textarea>
-        
-        <button onclick="WriteStory()" hidden>Write Story</button>
-        <textarea id="story"></textarea>
-    </body>
+        function handleChunk(textChunk) 
+        {
+            outputElement = document.getElementById("response");
+            outputElement.textContent += textChunk;
+            speechtext += textChunk;
+            if (textChunk.includes(".")) 
+            {
+                Speak(speechtext);
+                speechtext = "";
+            }  
+        }
+    </script>
 </html>
