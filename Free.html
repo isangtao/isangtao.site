@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>Converser</title>
+        <style>
+            body {color: green; padding: 100px; background-color: black}
+            h2 {color: #0f0}
+            form {background: #111; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 255, 0, 0.5)}
+            label {font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; color: #0f0}
+            input, select, textarea {width: 95%; padding: 10px; margin-bottom: 10px; border: 1px solid #0f0; border-radius: 4px; background-color: #222; color: #0f0}
+            button {background: #0f0; color: black; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer}
+            button:hover {background: #00ff00}
+            canvas {border: 1px solid #0f0; width: 100%; height: 150px; background-color: #222}
+            p {white-space: pre-wrap; word-wrap: break-word}
+        </style>
+    </head>
+    <body>
+        
+        <h2>Free API test</h2>     
+
+        <label>Text</label>
+        <input id="question" value="What is an electron?"></input>
+        <button onclick="Answer()">Answer</button>
+        <p id="response"></p>
+        
+        <label>Image</label>
+        <input id="prompt" value="Golden skull with intricate carvings in the forest."></input>
+        <button onclick="Imagine()">Imagine</button>
+        <div><img id="imglink"></div>
+
+    </body>
+    <script>
+
+        async function Answer() 
+        {
+            document.getElementById("response").innerText = "Generating..."
+            url = "https://text.pollinations.ai/" + document.getElementById("question").value;
+            const response = await fetch(url);
+            document.getElementById("response").innerText = await response.text();
+        }
+
+        function Imagine()
+        {
+            document.getElementById("imglink").src = "https://image.pollinations.ai/prompt/" + document.getElementById("prompt").value;
+        }
+        
+    </script>
+</html>
