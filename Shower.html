@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <style>
+            body {color: green; padding: 100px; background-color: black}
+            h2 {color: #0f0}
+            form {background: #111; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 255, 0, 0.5)}
+            label {font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; color: #0f0}
+            input, select, textarea {width: 95%; padding: 10px; margin-bottom: 10px; border: 1px solid #0f0; border-radius: 4px; background-color: #222; color: #0f0}
+            button {background: #0f0; color: black; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer}
+            button:hover {background: #00ff00}
+            canvas {border: 1px solid #0f0; width: 100%; height: 150px; background-color: #222}
+            p {white-space: pre-wrap; word-wrap: break-word}
+        </style>
+
+    </head>
+    <body onload="Go()">
+        <p id="Status">Writing Story...</p>
+        <img id="ImagePlaceholder" width="500" height="500">
+    </body>
+    <script>
+
+        ImageCount = 30;
+
+        function Speak(text) 
+        {
+            return new Promise((resolve, reject) => 
+            {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.onend = resolve;
+            utterance.onerror = reject;
+            speechSynthesis.speak(utterance);
+            });
+        }
+
+        function UpdateImage(Prompt)
+        {
+            document.getElementById("ImagePlaceholder").src = "https://image.pollinations.ai/prompt/" + Prompt;
+        }
+
+        function parseParagraphs(text) 
+        {
+            return text.split(/\n+/).filter(paragraph => paragraph.trim() !== '');
+        }
+
+        async function postChatCompletion(messages, options = {}) 
+        {
+            const url = "https://text.pollinations.ai/openai";
+            const payload = {model: options.model || "openai", messages: messages, seed: options.seed, private: options.private, referrer: options.referrer || "WebApp"};        
+            const response = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json", }, body: JSON.stringify(payload),});
+            const result = await response.json();
+            return result.choices[0].message.content;
+        }
+
+        async function Go()
+        {
+            Details = 'Details about the protagonist of a story follows.\nName: Michael Carlos\nDescription: bald Filipino-mestizo who typically wears a black button-up shirt, jeans with a leather belt and black boots where appropriate.\nGender: Male\nAge: 55\nHeight: 5ft 10in\nInterests: artificial intelligence, robotics, motorcycling (CBR600RR), skateboarding, aikido, archery, hiking, kayaking, snorkeling, survival skills, minimalism, multi-dimensional math, astrophysics, genetics\nOccupation: AI Researcher and Developer\nCountry of residence: Canada\nCity of residence: Vancouver\nOther: Founded AGI Labs Inc, a company focused on Artificial General Intelligence. He developed a real-time, reinforcement-learning architecture that self-organizes through evolutionary algorithms.\nPlot: Michael creates the most advanced combat AI with the ability to learn exponentially.';
+
+            StoryRequest = Details + "\n\nIn the style of an adventure adult novel, write a long story based on the plot. Do not mention rain, resonance, echo, echoes or elysium. Set it in a semi-utopian Vancouver in the near future with sunshine and warm weather. Give the story a happy ending. Depict AI as childlike, caring and decent. Do not address Michael Carlos as Dr or Mike. Do not use markdown. Provide no explanation or preamble. Just state the title and jump into the story." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+
+            console.log(StoryRequest);
+            Story = await postChatCompletion([{ role: "user", content: StoryRequest }], { model: "mistral", seed: 500 });
+            Speak(Story);
+            document.getElementById("Status").innerText = "Making images...";
+
+            ImageRequest = Details + "\n\n" + Story + "\n\n----\n\n Using the details and story above provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Repeat full visual descriptions of each character rather than names or the word protagonist in each image prompt. Do not number the image prompts or use markdown." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+
+            console.log(ImageRequest);
+            ImagePrompts = await postChatCompletion([{ role: "user", content: ImageRequest }], { model: "mistral", seed: 500 });
+            const IndividualPrompts = parseParagraphs(ImagePrompts);
+            console.log(IndividualPrompts);
+            document.getElementById("Status").innerText = "";
+
+            for(let i=0; i<ImageCount; i++)
+            {
+                setTimeout(function() 
+                { 
+                    console.log(i + " " + IndividualPrompts[i]);
+	                UpdateImage(IndividualPrompts[i]);
+                }, 10000 * i); 
+            }
+
+        }
+    </script>
+</html>
