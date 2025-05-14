@@ -126,7 +126,7 @@
         async function Slideshow()
         {
             Story = document.getElementById("Story").innerText;
-            ImageRequest = Details + "\n\n" + Story + "\n\n----\n\n Using the details and story above provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character rather than names, the word 'protagonist' or 'the man' in each image prompt. Do not number the image prompts or use markdown. Do not say 'the man' or 'the researcher. Describe the protagonist in full every time." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+            ImageRequest = Details + "\n\n" + Story + "\n\n----\n\n Using the details and story above provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character rather than names, the word 'protagonist' or 'the man' in each image prompt. Do not number the image prompts or use markdown. Do not say 'the man' or 'the researcher.' Describe the protagonist in full every time." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
 
             console.log(ImageRequest);
             ImagePrompts = await postChatCompletion([{ role: "user", content: ImageRequest }], { model: "mistral", seed: 500 });
