@@ -13,11 +13,11 @@
         </style>
 
     </head>
-    <body onload="Go()">        
-        <h2>Story Teller</h2>
-        <p class="subtitle">© 2025 Michael Carlos</p>
+    <body onload="Go()">
         <div style="text-align: center;">
-                <img id="ImagePlaceholder" width="500" height="500" hidden>
+            <h2>Story Teller</h2>
+            <p class="subtitle">© 2025 Michael Carlos</p>
+            <img id="ImagePlaceholder" width="500" height="500" hidden>
         </div>
         <p id="Story"></p>
     </body>
@@ -126,7 +126,7 @@
         async function Slideshow()
         {
             Story = document.getElementById("Story").innerText;
-            ImageRequest = Details + "\n\n" + Story + "\n\n----\n\n Using the details and story above provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Do not cross-reference the image prompts with each other. Treat each image prompt as stand-alone and independent. Repeat full visual descriptions of each character rather than names or the word protagonist in each image prompt. Do not number the image prompts or use markdown." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+            ImageRequest = Details + "\n\n" + Story + "\n\n----\n\n Using the details and story above provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character rather than names, the word 'protagonist' or 'the man' in each image prompt. Do not number the image prompts or use markdown." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
 
             console.log(ImageRequest);
             ImagePrompts = await postChatCompletion([{ role: "user", content: ImageRequest }], { model: "mistral", seed: 500 });
