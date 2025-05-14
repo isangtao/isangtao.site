@@ -62,7 +62,7 @@
             console.log(StoryRequest);
             Story = await postChatCompletion([{ role: "user", content: StoryRequest }], { model: "mistral", seed: 500 });
             Speak(Story);
-            document.getElementById("Status").innerText = "Making images (30 seconds)...";
+            document.getElementById("Status").innerText = "Making images (45 seconds)...";
 
             ImageRequest = Details + "\n\n" + Story + "\n\n----\n\n Using the details and story above provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Repeat full visual descriptions of each character rather than names or the word protagonist in each image prompt. Do not number the image prompts or use markdown." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
 
