@@ -55,7 +55,7 @@
                         silenceTimer = setTimeout(() => 
                         {
                             if (typeof controller !== 'undefined') controller.abort();
-                            for (let k = 0; k < 100; k++) speechSynthesis.cancel();
+                            while (speechSynthesis.speaking) speechSynthesis.cancel();
                             Go(myprompt);
                             myprompt = '';
                             j = event.results.length;
