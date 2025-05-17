@@ -118,7 +118,7 @@
         {
             Details = "Details about the protagonist of a story follows.\nName: Cassandra Carlos\nDescription: Cassandra is a beautiful ectomorph Filipina-mestiza. She has long black hair and brown.\nGender: Female\nAge: 25\nHeight: 5ft 6in\nInterests: ideo games, programming, art, business \nOccupation: Freelancer\nCountry of residence: Canada\nCity of residence: Vancouver\nOther: She lives with her house mates in Vancouver. She loves them all. She loves ramen.\nPlot: Cassandra gets a six figure job and has a successful career.";
 
-            StoryRequest = Details + "\n\nIn the style of an adventure adult novel, write a long story based on the plot. Set it in downtown Vancouver in the present. Give the story a happy ending. Do not use markdown. Provide no explanation or preamble. Just state the title and jump into the story." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+            StoryRequest = Details + "\n\nIn the style of an adventure adult novel, write a long story based on the plot. Do not mention rain. Set it in downtown Vancouver in the present. Give the story a happy ending. Do not use markdown. Provide no explanation or preamble. Just state the title and jump into the story." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
 
             console.log(StoryRequest);
             streamChatCompletion([{ role: "user", content: StoryRequest}], { model: "openai" }, handleChunk);
