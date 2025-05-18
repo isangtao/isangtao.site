@@ -24,6 +24,8 @@
     <script>
         ImageCount = 30;
         SpeechText = "";
+        ImagePrompts = "";
+        SectionFlag = 0;
 
         function Speak(text) 
         {
@@ -44,15 +46,6 @@
         function parseParagraphs(text) 
         {
             return text.split(/\n+/).filter(paragraph => paragraph.trim() !== '');
-        }
-
-        async function postChatCompletion(messages, options = {}) 
-        {
-            const url = "https://text.pollinations.ai/openai";
-            const payload = {model: options.model || "openai", messages: messages, seed: options.seed, private: options.private, referrer: options.referrer || "WebApp"};        
-            const response = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json", }, body: JSON.stringify(payload),});
-            const result = await response.json();
-            return result.choices[0].message.content;
         }
 
         async function streamChatCompletion(messages, options = {}, onChunkReceived) 
@@ -103,21 +96,33 @@
 
         function handleChunk(textChunk) 
         {
-            outputElement = document.getElementById("Story");
-            outputElement.textContent += textChunk;
-            SpeechText += textChunk;
-            if (textChunk.includes(".") || textChunk.includes("!") || textChunk.includes("?")) 
+            if (textChunk.includes("---"))
+                SectionFlag = 1;
+
+            if(SectionFlag==1)
             {
-                Speak(SpeechText);
-                SpeechText = "";
-            }  
+                ImagePrompts += textChunk;
+            }
+
+            if(SectionFlag==0)
+            {
+                outputElement = document.getElementById("Story");
+                outputElement.textContent += textChunk;
+                SpeechText += textChunk;
+                if (textChunk.includes(".") || textChunk.includes("!") || textChunk.includes("?")) 
+                {
+                    Speak(SpeechText);
+                    SpeechText = "";
+                }
+            } 
+
         }
 
         async function Go()
         {
-            Details = 'Details about the protagonist of a story follows.\nName: Michael Carlos\nDescription: Michael is a bald mesomorph Filipino. He has a black stubble. He typically wears a black button-up shirt, jeans with a leather belt and black leather shoes in an office environment. He wears appropriate gear for other activities.\nGender: Male\nAge: 55\nHeight: 5ft 10in\nInterests: artificial intelligence, robotics, motorcycling (CBR600RR), aikido, archery, hiking, kayaking, snorkeling, survival skills, minimalism, multi-dimensional math, astrophysics, genetics\nOccupation: AI Researcher and Developer\nCountry of residence: Canada\nCity of residence: Vancouver\nOther: Founded A G I Labs Inc, a company focused on Artificial General Intelligence. He developed a real-time, reinforcement-learning architecture that self-organizes through evolutionary algorithms.\nPlot: Michael creates an advanced AI with the ability to learn continuously.';
+            Details = 'Details about the protagonist of a story follows.\nName: Michael Carlos\nDescription: Michael is a bald mesomorph Filipino-mestizo. He has a black stubble. He typically wears a black button-up shirt, jeans with a leather belt and black leather shoes in an office environment. He wears appropriate gear for other activities.\nGender: Male\nAge: 55\nHeight: 5ft 10in\nInterests: artificial intelligence, robotics, motorcycling (CBR600RR), aikido, archery, hiking, kayaking, snorkeling, survival skills, minimalism, multi-dimensional math, astrophysics, genetics\nOccupation: AI Researcher and Developer\nCountry of residence: Canada\nCity of residence: Vancouver\nOther: Founded A G I Labs Inc, a company focused on Artificial General Intelligence. He developed a real-time, reinforcement-learning architecture that self-organizes through evolutionary algorithms.\nPlot: Michael creates an advanced AI with the ability to learn continuously.';
 
-            StoryRequest = Details + "\n\nIn the style of an adventure adult novel, write a long story based on the plot. Do not mention rain, resonance, echo, echoes or elysium. Set it in a semi-utopian Vancouver in the near future with sunshine and warm weather. Give the story a happy ending. Depict AI as childlike in curiosity, caring and decent. Do not address Michael Carlos as Dr or Mike. Provide no explanation or preamble. Just state the title and jump into the story." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+            StoryRequest = Details + "\n\nIn the style of an adventure adult novel, write a long story based on the plot. Do not mention rain, resonance, echo, echoes or elysium. Set it in a semi-utopian Vancouver in the near future with sunshine and warm weather. Give the story a happy ending. Depict AI as childlike in curiosity, caring and decent. Do not address Michael Carlos as Dr or Mike. Provide no explanation or preamble. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say 'the man', protagonist's name, 'protagonist' or 'the researcher.' You must describe the protagonist in full detail as 'a 55 year-old, bald, mesomorph filipino-mestizo with black stubble' every time." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
 
             console.log(StoryRequest);
             streamChatCompletion([{ role: "user", content: StoryRequest}], { model: "openai" }, handleChunk);
@@ -125,22 +130,17 @@
 
         async function Slideshow()
         {
-            Story = document.getElementById("Story").innerText;
-            ImageRequest = Details + "\n\n" + Story + "\n\n----\n\n Using the details and story above provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say the protagonist's name, 'protagonist', 'the man' or 'the researcher.' Describe the protagonist in full every time." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
-
-            console.log(ImageRequest);
-            ImagePrompts = await postChatCompletion([{ role: "user", content: ImageRequest }], { model: "mistral", seed: 500 });
             const IndividualPrompts = parseParagraphs(ImagePrompts);
             console.log(IndividualPrompts);
             document.getElementById("ImagePlaceholder").removeAttribute("hidden");
 
-            for(let i=0; i<ImageCount; i++)
+            for(let i=1; i<ImageCount; i++)
             {
                 setTimeout(function() 
                 { 
                     console.log(i + " " + IndividualPrompts[i]);
 	                UpdateImage(IndividualPrompts[i]);
-                }, 15000 * i); 
+                }, 10000 * i); 
             }
 
         }
