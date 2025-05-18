@@ -133,8 +133,11 @@
             const IndividualPrompts = parseParagraphs(ImagePrompts);
             console.log(IndividualPrompts);
             document.getElementById("ImagePlaceholder").removeAttribute("hidden");
+		
+	    console.log(1 + " " + IndividualPrompts[1]);
+	    UpdateImage(IndividualPrompts[1]);
 
-            for(let i=1; i<ImageCount; i++)
+            for(let i=2; i<ImageCount; i++)
             {
                 setTimeout(function() 
                 { 
