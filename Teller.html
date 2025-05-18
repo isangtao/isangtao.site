@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
     <head>
         <style>
@@ -25,6 +24,8 @@
     <script>
         ImageCount = 30;
         SpeechText = "";
+        ImagePrompts = "";
+        SectionFlag = 0;
 
         function Speak(text) 
         {
@@ -45,15 +46,6 @@
         function parseParagraphs(text) 
         {
             return text.split(/\n+/).filter(paragraph => paragraph.trim() !== '');
-        }
-
-        async function postChatCompletion(messages, options = {}) 
-        {
-            const url = "https://text.pollinations.ai/openai";
-            const payload = {model: options.model || "openai", messages: messages, seed: options.seed, private: options.private, referrer: options.referrer || "WebApp"};        
-            const response = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json", }, body: JSON.stringify(payload),});
-            const result = await response.json();
-            return result.choices[0].message.content;
         }
 
         async function streamChatCompletion(messages, options = {}, onChunkReceived) 
@@ -104,21 +96,33 @@
 
         function handleChunk(textChunk) 
         {
-            outputElement = document.getElementById("Story");
-            outputElement.textContent += textChunk;
-            SpeechText += textChunk;
-            if (textChunk.includes(".") || textChunk.includes("!") || textChunk.includes("?")) 
+            if (textChunk.includes("---"))
+                SectionFlag = 1;
+
+            if(SectionFlag==1)
             {
-                Speak(SpeechText);
-                SpeechText = "";
-            }  
+                ImagePrompts += textChunk;
+            }
+
+            if(SectionFlag==0)
+            {
+                outputElement = document.getElementById("Story");
+                outputElement.textContent += textChunk;
+                SpeechText += textChunk;
+                if (textChunk.includes(".") || textChunk.includes("!") || textChunk.includes("?")) 
+                {
+                    Speak(SpeechText);
+                    SpeechText = "";
+                }
+            } 
+
         }
 
         async function Go()
         {
-            Details = "Details about the protagonist of a story follows.\nName: Cassandra Carlos\nDescription: Cassandra is a beautiful ectomorph Filipina-mestiza. She has long black hair and brown.\nGender: Female\nAge: 25\nHeight: 5ft 6in\nInterests: ideo games, programming, art, business \nOccupation: Freelancer\nCountry of residence: Canada\nCity of residence: Vancouver\nOther: She lives with her house mates in Vancouver. She loves them all. She loves ramen.\nPlot: Cassandra gets a six figure job and has a successful career.";
+            Details = "Details about the protagonist of a story follows.\nName: Cassandra Carlos\nDescription: Cassandra is a beautiful ectomorph Filipina-mestiza. She has long black hair and brown.\nGender: Female\nAge: 25\nHeight: 5ft 6in\nInterests: ideo games, programming, art, business \nOccupation: Freelancer\nCountry of residence: Canada\nCity of residence: Vancouver\nOther: She lives with her house mates in Vancouver. She loves them all. She loves ramen.\nPlot: Cassandra gets her dream job and starts a successful career.";
 
-            StoryRequest = Details + "\n\nIn the style of an adventure adult novel, write a long story based on the plot. Do not mention rain. Set it in downtown Vancouver in the present. Give the story a happy ending. Do not use markdown. Provide no explanation or preamble. Just state the title and jump into the story." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+            StoryRequest = Details + "\n\nIn the style of an adventure adult novel, write a long story based on the plot. Do not mention rain, resonance, echo, echoes or elysium. Set it in a semi-utopian Vancouver in the near future with sunshine and warm weather. Give the story a happy ending. Depict AI as childlike in curiosity, caring and decent. Do not address Michael Carlos as Dr or Mike. Provide no explanation or preamble. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say 'the man', protagonist's name, 'protagonist' or 'the researcher.' You must describe the protagonist in full detail as 'a beautiful ectomorph Filipina-mestiza. She has long black hair and brown eyes' every time." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
 
             console.log(StoryRequest);
             streamChatCompletion([{ role: "user", content: StoryRequest}], { model: "openai" }, handleChunk);
@@ -126,16 +130,14 @@
 
         async function Slideshow()
         {
-            Story = document.getElementById("Story").innerText;
-            ImageRequest = Details + "\n\n" + Story + "\n\n----\n\n Using the details and story above provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say the protagonist's name, 'protagonist'. Describe the protagonist in full every time he or she is part of an image prompt." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
-
-            console.log(ImageRequest);
-            ImagePrompts = await postChatCompletion([{ role: "user", content: ImageRequest }], { model: "mistral", seed: 500 });
             const IndividualPrompts = parseParagraphs(ImagePrompts);
             console.log(IndividualPrompts);
             document.getElementById("ImagePlaceholder").removeAttribute("hidden");
+		
+            console.log(1 + " " + IndividualPrompts[1]);
+            UpdateImage(IndividualPrompts[1]);
 
-            for(let i=0; i<ImageCount; i++)
+            for(let i=2; i<ImageCount; i++)
             {
                 setTimeout(function() 
                 { 
