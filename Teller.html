@@ -1,20 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script>
-            Details = "";
-            Description = "";
-            Extras = ""
-        </script>
         <style>
-            body {color: green; padding: 100px; background-color: black}
-            h2 {color: #0f0}
-            form {background: #111; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 255, 0, 0.5)}
-            label {font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; color: #0f0}
-            input, select, textarea {width: 95%; padding: 10px; margin-bottom: 10px; border: 1px solid #0f0; border-radius: 4px; background-color: #222; color: #0f0}
-            button {background: #0f0; color: black; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer}
-            button:hover {background: #00ff00}
-            canvas {border: 1px solid #0f0; width: 100%; height: 150px; background-color: #222}
+        <style>
+            body {color: #111111; padding: 100px; background-color: #eeeeee}
+            h2 {color: #111111}
+            form {background: #eeeeee; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px grey}
+            label {font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; color: #111111}
+            input, select, textarea {width: 95%; padding: 10px; margin-bottom: 10px; border: 1px solid #111111; border-radius: 4px; background-color: #eeeeee; color: #111111}
+            button {background-color: #eeeeee; color: #111111;  border: 1px solid #003300; padding: 10px; margin: 5px; cursor: pointer; font-size: 16px}
+            canvas {border: 1px solid #111111; width: 100%; height: 150px; background-color: #eeeeee}
             p {white-space: pre-wrap; word-wrap: break-word}
             div.scroll-container {overflow: auto; white-space: nowrap; padding: 10px}
             div.scroll-container img {padding: 10px}
@@ -25,21 +20,17 @@
         <div id="custom">
             <h2>Story Teller</h2>
             <p class="subtitle">© 2025 Michael Carlos</p>
+            <label>Presets</label>
+            <button onclick="Cassandra()">Cassandra</button>
+            <button onclick="Michael()">Michael</button>
+            <button onclick="Brian()">Brian</button>
+            <button onclick="Thomas()">Thomas</button>
             <label for="details">Details</label>
-            <textarea id="details" rows="8">
-Name: Cassandra Carlos
-Interests: art, video games, programming, business
-Occupation: Freelancer
-Country of residence: Canada
-City of residence: Vancouver
-Other: She loves ramen. She lives with her best friend Andrea and her other two housemates Collin and Haley.
-Plot: Cassandra gets her dream job and starts a successful career.
-            </textarea>
+            <textarea id="details" rows="10"></textarea>
             <label for="description">Description</label>
-            <input id="description" value="A 25 year old Filipina who has long black hair"></input>
+            <input id="description"></input>
             <label id="extrastitle">Extras</label>
-            <textarea id="extras">
-Write in the style of an adventure adult novel. Set it in present Vancouver with sunshine and warm weather.</textarea>
+            <textarea id="extras" rows="5"></textarea>
             <button id="go" onclick="Go()">New Story</button>
         </div>
         <p id="Story"></p>
@@ -150,9 +141,9 @@ Write in the style of an adventure adult novel. Set it in present Vancouver with
         async function Go()
         {
             document.getElementById("custom").hidden = true;
-            Details = document.getElementById("details").innerText;
+            Details = document.getElementById("details").value;
             Description = document.getElementById("description").value;
-            Extras = document.getElementById("extras").innerText;
+            Extras = document.getElementById("extras").value;
             StoryRequest = "Details about the protagonist of a story follows:\n" + Details + "\n\n" + Extras + " Write a long story based on the above information. Provide no explanation or preamble. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say the protagonist's name or 'protagonist.' You must describe the protagonist in full detail as '" + Description + "' every time. \nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
             console.log(StoryRequest);
             streamChatCompletion([{ role: "user", content: StoryRequest}], { model: "openai" }, handleChunk);
@@ -175,6 +166,62 @@ Write in the style of an adventure adult novel. Set it in present Vancouver with
                 }, 10000 * i); 
             }
 
+        }
+
+        function Cassandra()
+        {
+            document.getElementById("details").value = "\
+Name: Cassandra Carlos\n\
+Interests: art, video games, programming, business\n\
+Occupation: Freelancer\n\
+Country of residence: Canada\n\
+City of residence: Vancouver\n\
+Other: She loves ramen. She lives with her best friend Andrea and her other two housemates Collin and Haley.\n\
+Plot: Cassandra gets her dream job and starts a successful career.";
+            document.getElementById("description").value = "A filipina who has long black hair";
+            document.getElementById("extras").value = "Write in the style of an adventure adult novel. Set it in present Vancouver with sunshine and warm weather.";
+        }
+
+        function Michael()
+        {
+            document.getElementById("details").value = "\
+Name: Michael Carlos\n\
+Age: 56 years old\n\
+Interests: artificial intelligence, robotics, motorcycling (CBR600RR), aikido, archery, hiking, kayaking, snorkeling, survival skills, minimalism, multi-dimensional math, astrophysics, genetics\n\
+Occupation: AI Researcher and Developer\n\
+Country of residence: Canada\n\
+City of residence: Vancouver\n\
+Other: Founded A G I Labs Inc, a company focused on Artificial General Intelligence. He developed a real-time, reinforcement-learning architecture that self-organizes through evolutionary algorithms.\n\
+Plot: Michael creates an advanced AI with the ability to learn continuously.";
+            document.getElementById("description").value = "A bald, fit filipino with grey stubble";
+            document.getElementById("extras").value = "Write in the style of an action adult novel. Do not mention rain, resonance, echo, echoes or elysium. Set it in a semi-utopian Vancouver in the near future with sunshine and warm weather. Give the story a happy ending. Depict AI as childlike in curiosity, caring and decent. Do not address Michael Carlos as Dr or Mike.";
+        }
+
+        function Brian()
+        {
+            document.getElementById("details").value = "\
+Name: Brian\n\
+Interests: mountaineering, hiking, kayaking, spelunking, scuba diving\n\
+Occupation: Director of Product\n\
+Country of residence: Canada\n\
+City of residence: Vancouver\n\
+Other: Brian specializes in productizing high-technology equipment. He enjoys global cuisine.\n\
+Plot: Brian, product director and adventure enthusiast, uncovers a hidden underwater cave beneath utopian downtown Vancouver during a scuba kayaking expedition, where he discovers ancient high-tech artifacts that he ingeniously repurposes to create sustainable energy solutions, ultimately transforming the city into a beacon of environmental harmony and innovation.";
+            document.getElementById("description").value = "Athletic with brown hair parted on the left side";
+            document.getElementById("extras").value = "Write in the style of an mystery adult novel. Set it in present Vancouver with sunshine and warm weather.";
+        }
+
+
+        function Thomas()
+        {
+            document.getElementById("details").value = "\
+Name: Thomas\n\
+Interests: Childrens shows such as Bluey and Sesame Street\n\
+Age: 2 years old\n\
+Plot: Anything suitable for a child this age.\n\
+Other: Loves to eat vegetables";
+            document.getElementById("description").value = "A 2 year old boy with curly brown hair and big brown eyes.";
+            document.getElementById("extras").value = "Write in the style of a childrens adventure book. Set the story in present Vancouver during the summer time.";
         }
     </script>
 </html>
