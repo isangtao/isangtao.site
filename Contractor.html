@@ -157,7 +157,7 @@ Either party may terminate this agreement with 30 days’ written notice. If ter
 
         async function go()
         {
-            document.getElementById("output").value = "";
+            document.getElementById("output").innerText = "";
 
             context="Software Project Agreement\n" + 
             "\nParty A (Client): " + document.getElementById("partyA").value + 
@@ -174,8 +174,8 @@ Either party may terminate this agreement with 30 days’ written notice. If ter
             "\nDispute Resolution: " + document.getElementById("disputeResolution").value + 
             "\nTermination Clause: " + document.getElementById("terminationClause").value;
 
-            myprompt=context + "\n\nUsing the details above, write a comprehensive NDA, contract, invoice template and reciept template. Provide no explanation or preamble. State a legal disclaimer after.";
-            
+            myprompt=context + "\n\nUsing the details above, write a comprehensive NDA, contract, invoice template and reciept template. Provide no explanation or preamble. State a legal disclaimer after.\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+
             console.log(myprompt);
 
             streamChatCompletion([{ role: "user", content: myprompt}], { model: "openai" }, handleChunk);
