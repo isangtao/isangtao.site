@@ -24,11 +24,12 @@
         </style>
 
     </head>
-    <body onload="Go()">
+    <body>
         <div id="scroller" class="scroll-container"></div>
         <div style="text-align: center;">
-            <h2>Story Teller</h2>
-            <p class="subtitle">© 2025 Michael Carlos</p>
+            <button id="go" onclick="Go()">New Story</button>
+            <!--<h2>Story Teller</h2>
+            <p class="subtitle">© 2025 Michael Carlos</p>-->
         </div>
         <p id="Story"></p>
     </body>
@@ -137,6 +138,7 @@
 
         async function Go()
         {
+            document.getElementById("go").hidden = true;
             StoryRequest = Details + "\n\nIn the style of an adventure childrens book, write a long story based on any suitable plot.  Provide no explanation or preamble. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say the protagonist's name or 'protagonist.' You must describe the protagonist in full detail as '" + Description + "' every time." + "\n \
             Seed: " + Math.floor(Math.random() * 999999999) + "\n\n";
             console.log(StoryRequest);
