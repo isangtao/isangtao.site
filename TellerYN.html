@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <script>
+            Details = 'Details about the protagonist of a story follows.\n \
+            Name: Thomas\n \
+            Interests: Childrens shows such as Bluey and Sesame Street\n \
+            Other: Loves to eat vegetables\n';
+            Description = "A 2 year old boy with curly brown hair and big brown eyes.";
+            Extras = "Set the story in present Vancouver during the summer time."
+        </script>
+        <style>
+            body {color: #111111; padding: 100px; background-color: #eeeeee}
+            h2 {color: #111111}
+            form {background: #eeeeee; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px #111111(0, 255, 0, 0.5)}
+            label {font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; color: #111111}
+            input, select, textarea {width: 95%; padding: 10px; margin-bottom: 10px; border: 1px solid #111111; border-radius: 4px; background-color: #eeeeee; color: #111111}
+            button {background: #eeeeee; color: #111111; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer}
+            button:hover {background: #eeeeee}
+            canvas {border: 1px solid #111111; width: 100%; height: 150px; background-color: #eeeeee}
+            p {white-space: pre-wrap; word-wrap: break-word}
+            div.scroll-container {overflow: auto; white-space: nowrap; padding: 10px}
+            div.scroll-container img {padding: 10px}
+        </style>
+
+    </head>
+    <body onload="Go()">
+        <div id="scroller" class="scroll-container"></div>
+        <div style="text-align: center;">
+            <h2>Story Teller</h2>
+            <p class="subtitle">© 2025 Michael Carlos</p>
+        </div>
+        <p id="Story"></p>
+    </body>
+    <script>
+        ImageCount = 30;
+        SpeechText = "";
+        ImagePrompts = "";
+        SectionFlag = 0;
+
+        function Speak(text) 
+        {
+            return new Promise((resolve, reject) => 
+            {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.onend = resolve;
+            utterance.onerror = reject;
+            speechSynthesis.speak(utterance);
+            });
+        }
+
+        function UpdateImage(Prompt)
+        {
+            const img = document.createElement("img");
+            img.src = "https://image.pollinations.ai/prompt/" + Prompt;
+            img.title = Prompt;
+            img.width = "500";
+            img.height = "500"; 
+            div = document.getElementById("scroller")
+            div.prepend(img);
+        }
+
+        function parseParagraphs(text) 
+        {
+            return text.split(/\n+/).filter(paragraph => paragraph.trim() !== '');
+        }
+
+        async function streamChatCompletion(messages, options = {}, onChunkReceived) 
+        {
+            const url = "https://text.pollinations.ai/openai";
+            const payload = {model: options.model || "openai", messages: messages, seed: options.seed, stream: true};
+            const response = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json", Accept: "text/event-stream", }, body: JSON.stringify(payload)});
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+
+            console.log("Starting stream...");
+
+            while (true) 
+            {
+                const { done, value } = await reader.read();
+                if (done) 
+                {
+                    console.log("Stream finished.");
+                    Slideshow();
+                    break;
+                }
+
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split("\n\n");
+                buffer = lines.pop(); 
+
+                for (const line of lines) 
+                {
+                    if (line.startsWith("data: ")) 
+                    {
+                        const dataStr = line.substring(6).trim();
+                        if (dataStr === "[DONE]") 
+                        {
+                            console.log("Received [DONE] marker.");
+                            continue; // Or handle end of stream signal
+                        }
+                        const chunk = JSON.parse(dataStr);
+                        const content = chunk?.choices?.[0]?.delta?.content;
+                        if (content && onChunkReceived) 
+                        {
+                        onChunkReceived(content); // Callback to handle the text chunk
+                        }
+                    }
+                }
+            }
+        } 
+
+        function handleChunk(textChunk) 
+        {
+            if (textChunk.includes("---"))
+                SectionFlag = 1;
+
+            if(SectionFlag==1)
+            {
+                ImagePrompts += textChunk;
+            }
+
+            if(SectionFlag==0)
+            {
+                outputElement = document.getElementById("Story");
+                outputElement.textContent += textChunk;
+                SpeechText += textChunk;
+                if (textChunk.includes(".") || textChunk.includes("!") || textChunk.includes("?")) 
+                {
+                    Speak(SpeechText);
+                    SpeechText = "";
+                }
+            } 
+
+        }
+
+        async function Go()
+        {
+            StoryRequest = Details + "\n\nIn the style of an adventure childrens book, write a long story based on any suitable plot.  Provide no explanation or preamble. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say 'the man', protagonist's name, 'protagonist' or 'the researcher.' You must describe the protagonist in full detail as '" + Description + "' every time." + "\n \
+            Seed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+            console.log(StoryRequest);
+            streamChatCompletion([{ role: "user", content: StoryRequest}], { model: "openai" }, handleChunk);
+        }
+
+        async function Slideshow()
+        {
+            const IndividualPrompts = parseParagraphs(ImagePrompts);
+            console.log(IndividualPrompts);
+		
+	    console.log(1 + " " + IndividualPrompts[1]);
+	    UpdateImage(IndividualPrompts[1]);
+
+            for(let i=2; i<ImageCount; i++)
+            {
+                setTimeout(function() 
+                { 
+                    console.log(i + " " + IndividualPrompts[i]);
+	                UpdateImage(IndividualPrompts[i]);
+                }, 10000 * i); 
+            }
+
+        }
+    </script>
+</html>
