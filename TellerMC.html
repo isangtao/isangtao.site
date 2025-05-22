@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script>
+            Details = "Details about the protagonist of a story follows:\n \
+            Name: Michael Carlos\n\
+            Interests: artificial intelligence, robotics, motorcycling (CBR600RR), aikido, archery, hiking, kayaking, snorkeling, survival skills, minimalism, multi-dimensional math, astrophysics, genetics\n\
+            Occupation: AI Researcher and Developer\n\
+            Country of residence: Canada\n\
+            City of residence: Vancouver\n\
+            Other: Founded A G I Labs Inc, a company focused on Artificial General Intelligence. He developed a real-time, reinforcement-learning architecture that self-organizes through evolutionary algorithms.\n\
+            Plot: Michael creates an advanced AI with the ability to learn continuously.";
+            Description = "a bald, 55 year-old, fit filipino with grey stubble";
+            Extras = "Write in the style of an adventure adult novel. Do not mention rain, resonance, echo, echoes or elysium. Set it in a semi-utopian Vancouver in the near future with sunshine and warm weather. Give the story a happy ending. Depict AI as childlike in curiosity, caring and decent. Do not address Michael Carlos as Dr or Mike."
+        </script>
         <style>
             body {color: green; padding: 100px; background-color: black}
             h2 {color: #0f0}
@@ -14,14 +26,13 @@
             div.scroll-container {overflow: auto; white-space: nowrap; padding: 10px}
             div.scroll-container img {padding: 10px}
         </style>
-
     </head>
-    <body onload="Go()">
+    <body>
         <div id="scroller" class="scroll-container"></div>
         <div style="text-align: center;">
             <h2>Story Teller</h2>
             <p class="subtitle">© 2025 Michael Carlos</p>
-            <!--<img id="ImagePlaceholder" width="500" height="500" hidden>-->
+            <button id="go" onclick="Go()">New Story</button>
         </div>
         <p id="Story"></p>
     </body>
@@ -51,11 +62,6 @@
             img.height = "500"; 
             div = document.getElementById("scroller")
             div.prepend(img);
-            //const div = document.createElement("div")
-            //div.style = "text-align: center";
-            //document.body.appendChild(img);
-            //div.prepend(img);
-            //document.body.prepend(div);
         }
 
         function parseParagraphs(text) 
@@ -135,10 +141,9 @@
 
         async function Go()
         {
-            Details = 'Details about the protagonist of a story follows.\nName: Michael Carlos\nInterests: artificial intelligence, robotics, motorcycling (CBR600RR), aikido, archery, hiking, kayaking, snorkeling, survival skills, minimalism, multi-dimensional math, astrophysics, genetics\nOccupation: AI Researcher and Developer\nCountry of residence: Canada\nCity of residence: Vancouver\nOther: Founded A G I Labs Inc, a company focused on Artificial General Intelligence. He developed a real-time, reinforcement-learning architecture that self-organizes through evolutionary algorithms.\nPlot: Michael creates an advanced AI with the ability to learn continuously.';
-
-            StoryRequest = Details + "\n\nIn the style of an adventure adult novel, write a long story based on the plot. Do not mention rain, resonance, echo, echoes or elysium. Set it in a semi-utopian Vancouver in the near future with sunshine and warm weather. Give the story a happy ending. Depict AI as childlike in curiosity, caring and decent. Do not address Michael Carlos as Dr or Mike. Provide no explanation or preamble. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say 'the man', protagonist's name, 'protagonist' or 'the researcher.' You must describe the protagonist in full detail as 'a bald, 55 year-old, fit filipino with grey stubble' every time." + "\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
-
+            document.getElementById("go").hidden = true;
+            StoryRequest = Details + "\n\n" + Extras + " Write a long story based on the above information. Provide no explanation or preamble. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say the protagonist's name or 'protagonist.' You must describe the protagonist in full detail as '" + Description + "' every time." + "\n \
+            Seed: " + Math.floor(Math.random() * 999999999) + "\n\n";
             console.log(StoryRequest);
             streamChatCompletion([{ role: "user", content: StoryRequest}], { model: "openai" }, handleChunk);
         }
@@ -147,7 +152,6 @@
         {
             const IndividualPrompts = parseParagraphs(ImagePrompts);
             console.log(IndividualPrompts);
-            //document.getElementById("ImagePlaceholder").removeAttribute("hidden");
 		
 	    console.log(1 + " " + IndividualPrompts[1]);
 	    UpdateImage(IndividualPrompts[1]);
