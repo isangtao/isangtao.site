@@ -2,16 +2,9 @@
 <html>
     <head>
         <script>
-            Details = "Details about the protagonist of a story follows:\n \
-            Name: Cassandra Carlos\n \
-            Interests: art, video games, programming, business \n \
-            Occupation: Freelancer\n \
-            Country of residence: Canada\n \
-            City of residence: Vancouver\n \
-            Other: She lives with her 3 housemates in Vancouver. One of her housemates is her best friend Andrea. She loves ramen.\n \
-            Plot: Cassandra gets her dream job and starts a successful career.";
-            Description = "a 25 year old Filipina who has long black hair";
-            Extras = "Write in the style of an adventure adult novel. Set it in Vancouver in the present with sunshine and warm weather."
+            Details = "";
+            Description = "";
+            Extras = ""
         </script>
         <style>
             body {color: green; padding: 100px; background-color: black}
@@ -29,9 +22,24 @@
     </head>
     <body>
         <div id="scroller" class="scroll-container"></div>
-        <div style="text-align: center;">
+        <div id="custom">
             <h2>Story Teller</h2>
             <p class="subtitle">© 2025 Michael Carlos</p>
+            <label for="details">Details</label>
+            <textarea id="details" rows="8">
+Name: Cassandra Carlos
+Interests: art, video games, programming, business
+Occupation: Freelancer
+Country of residence: Canada
+City of residence: Vancouver
+Other: She loves ramen. She lives with her best friend Andrea and her other two housemates Collin and Haley.
+Plot: Cassandra gets her dream job and starts a successful career.
+            </textarea>
+            <label for="description">Description</label>
+            <input id="description" value="A 25 year old Filipina who has long black hair"></input>
+            <label id="extrastitle">Extras</label>
+            <textarea id="extras">
+Write in the style of an adventure adult novel. Set it in present Vancouver with sunshine and warm weather.</textarea>
             <button id="go" onclick="Go()">New Story</button>
         </div>
         <p id="Story"></p>
@@ -141,9 +149,11 @@
 
         async function Go()
         {
-            document.getElementById("go").hidden = true;
-            StoryRequest = Details + "\n\n" + Extras + " Write a long story based on the above information. Provide no explanation or preamble. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say the protagonist's name or 'protagonist.' You must describe the protagonist in full detail as '" + Description + "' every time." + "\n \
-            Seed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+            document.getElementById("custom").hidden = true;
+            Details = document.getElementById("details").innerText;
+            Description = document.getElementById("description").value;
+            Extras = document.getElementById("extras").innerText;
+            StoryRequest = "Details about the protagonist of a story follows:\n" + Details + "\n\n" + Extras + " Write a long story based on the above information. Provide no explanation or preamble. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown. Do not say the protagonist's name or 'protagonist.' You must describe the protagonist in full detail as '" + Description + "' every time. \nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
             console.log(StoryRequest);
             streamChatCompletion([{ role: "user", content: StoryRequest}], { model: "openai" }, handleChunk);
         }
