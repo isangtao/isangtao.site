@@ -1,130 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Resumer</title>    
-    <style>
-        body {
-            color: green; 
-            padding: 100px; 
-            background-color: black;
-        }
-        h2 {
-            color: #0f0;
-        }
-        form {
-            background: #111;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin: 10px 0 5px;
-            text-align: left;
-            color: #0f0;
-        }
-        input, select, textarea {
-            width: 95%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #0f0;
-            border-radius: 4px;
-            background-color: #222;
-            color: #0f0;
-        }
-        button {
-            background: #0f0;
-            color: black;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #00ff00;
-        }
-        canvas {
-            border: 1px solid #0f0;
-            width: 100%;
-            height: 150px;
-            background-color: #222;
-        }
-        p {
-            
-            white-space: pre-wrap; 
-            word-wrap: break-word; 
-        }
-    </style>
-    <script>
-        async function go() 
-        {
+    <head>
+        <meta charset="UTF-8">
+        <title>Resumer</title>    
+        <style>
+            body {color: #111111; padding: 100px; background-color: #eeeeee}
+            h2 {color: #111111}
+            form {background: #eeeeee; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px grey}
+            label {font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; color: #111111}
+            input, select, textarea {width: 95%; padding: 10px; margin-bottom: 10px; border: 1px solid #111111; border-radius: 4px; background-color: #eeeeee; color: #111111}
+            button {background-color: #eeeeee; color: #111111;  border: 1px solid #003300; padding: 10px; margin: 5px; cursor: pointer; font-size: 16px}
+            canvas {border: 1px solid #111111; width: 100%; height: 150px; background-color: #eeeeee}
+            p {white-space: pre-wrap; word-wrap: break-word}
+            div.scroll-container {overflow: auto; white-space: nowrap; padding: 10px}
+            div.scroll-container img {padding: 10px}
+        </style>
+        <script>
 
-            const cv = document.getElementById("cv").value;
-            const jd = document.getElementById("jd").value;
+            async function streamChatCompletion(messages, options = {}, onChunkReceived) 
+            {
+                const url = "https://text.pollinations.ai/openai";
+                const payload = {model: options.model || "openai", messages: messages, seed: options.seed, private: true, stream: true};
+                const response = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json", Accept: "text/event-stream", }, body: JSON.stringify(payload)});
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = "";
 
-            myprompt = "Using my current resume, please write a modern resume that is custom for this job description. Then write a matching cover letter. Finally list 20 interview questions relevant to this role.\n\n<resume>\n\n" + cv + "\n\n</resume>\n\n<jobdescription>\n\n" + jd + "\n\n</jobdescription>";
-            
-            const outputElement = document.getElementById("output");
-            outputElement.textContent = "";
-            console.log(myprompt);
+                console.log("Starting stream...");
 
-            apikey = document.getElementById("apikey").value;
-            const model = document.getElementById("model").value;
-            if (apikey.length == 13) apikey += "0f99317c39492709c30afac86d977f902796f0fa2d942fd4ce654eed8050";
+                while (true) 
+                {
+                    const { done, value } = await reader.read();
+                    if (done) 
+                    {
+                        console.log("Stream finished.");
+                        break;
+                    }
 
-            const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${apikey}`
-                },
-                body: JSON.stringify({
-                    model: model,
-                    messages: [{ role: "user", content: myprompt }],
-                    stream: true
-                })
-            });
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split("\n\n");
+                    buffer = lines.pop(); 
 
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                const chunk = decoder.decode(value, { stream: true });
-                chunk.split("\n").forEach(line => {
-                    if (line.startsWith("data:")) {
-                        try {
-                            const json = JSON.parse(line.substring(5));
-                            if (json.choices?.[0]?.delta?.content) {
-                                outputElement.textContent += json.choices[0].delta.content;
+                    for (const line of lines) 
+                    {
+                        if (line.startsWith("data: ")) 
+                        {
+                            const dataStr = line.substring(6).trim();
+                            if (dataStr === "[DONE]") 
+                            {
+                                console.log("Received [DONE] marker.");
+                                continue; // Or handle end of stream signal
                             }
-                        } catch (error) {
-                            console.error("Error parsing chunk:", error);
+                            const chunk = JSON.parse(dataStr);
+                            const content = chunk?.choices?.[0]?.delta?.content;
+                            if (content && onChunkReceived) 
+                            {
+                            onChunkReceived(content); // Callback to handle the text chunk
+                            }
                         }
                     }
-                });
-            }
-        }
+                }
+            } 
 
-    </script>
-</head>
-<body>
-    <h2>Resume Customizer</h2>
-    <p class="subtitle">© 2025 Michael Carlos</p>
-    <label for="apikey">OpenRouter API Key</label>
-    <input type="text" id="apikey" value="sk-or-v1-">
-    <label for="model">Model</label>        
-    <select id="model">
-        <option selected>google/gemma-3-27b-it:free</option>
-        <option>meta-llama/llama-4-maverick:free</option>
-        <option>meta-llama/llama-4-scout:free</option>
-        <option>google/gemini-2.0-flash-exp:free</option>
-    </select>
-    <textarea id="cv" rows="50">
+            function handleChunk(textChunk) 
+            {
+                outputElement = document.getElementById("output");
+                outputElement.textContent += textChunk;
+            }
+
+            async function go()
+            {
+                document.getElementById("output").innerText = "";
+
+                const cv = document.getElementById("cv").value;
+                const jd = document.getElementById("jd").value;
+
+                myprompt = "Using my current resume, write a modern resume that is custom for this job description. Provide a short professional summary at the top. List relevant positions in full then summarize the remaining companies in one entry. Do not add skills that aren't already listed in the original resume. Collect relevant skills in their own section. Then write a matching cover letter. Finally list 20 interview questions relevant to this role and potential answers. Provide no explanation or preamble. Make no comments after.\n\n<resume>\n\n" + cv + "\n\n</resume>\n\n<jobdescription>\n\n" + jd + "\n\n</jobdescription>\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+                
+                console.log(myprompt);
+
+                streamChatCompletion([{ role: "user", content: myprompt}], { model: "openai" }, handleChunk);
+            }
+
+        </script>
+    </head>
+    <body>
+        <h2>Resume Customizer</h2>
+        <p class="subtitle">© 2025 Michael Carlos</p>
+        <h2>Resume and Job Description</h2>
+        <form>
+            <label>Resume</label>
+            <textarea id="cv" rows="50">
 Cassandra Carlos
 https://www.linkedin.com/in/cassandracarlos/
 c@xyz.com
@@ -142,7 +108,7 @@ Blue Ivy House, Vancouver, BC
 ● Maintained a clean and organized workspace, adhering to health and safety standards
 
 Website Developer (Freelance) September 2023 - November 2023
-Vancouver, BC
+Blue Ivy House, Vancouver, BC
 ● Designed and developed a custom WordPress website to enhance client visibility
 ● Ensured an intuitive layout and smooth navigation for users
 
@@ -160,8 +126,9 @@ SKILLS
 ● Organization & Attention to Detail
 ● Customer Service
 ● Teamwork & Collaboration
-    </textarea>
-    <textarea id="jd" rows="50">
+            </textarea>
+            <label>Job Description</label>
+            <textarea id="jd" rows="70">
 Front End Developer
 Graphically Speaking  1140 Pender Street West, Vancouver, BC
 
@@ -222,8 +189,9 @@ Email application to:
 
 Darrell Hadden, President
 darrell@graphicallyspeaking.ca
-</textarea>
-    <button onclick="go()">Customize Resume, Cover Letter and Interview Questions.</button>
-    <p id="output"></p>
-</body>
+            </textarea>
+        </form>
+        <button onclick="go()">Customize Resume, Cover Letter and Interview Questions.</button>
+        <p id="output"></p>
+    </body>
 </html>
