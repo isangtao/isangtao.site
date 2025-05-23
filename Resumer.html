@@ -75,177 +75,285 @@
                 const cv = document.getElementById("cv").value;
                 const jd = document.getElementById("jd").value;
 
-                myprompt = "Using my current resume, write a modern 1-page resume that is custom for this job description. Provide a short professional summary at the top. List relevant positions in full then summarize the remaining companies in one entry. Do not add skills that aren't already listed in the original resume. Collect relevant skills in their own section. Then write a matching cover letter. Finally list 20 interview questions relevant to this role and potential answers. Provide no explanation or preamble. Make no comments after.\n\n<resume>\n\n" + cv + "\n\n</resume>\n\n<jobdescription>\n\n" + jd + "\n\n</jobdescription>\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+                myprompt = "Using my current resume, write a modern resume that is custom for this job description. Provide a short professional summary at the top. List relevant positions in full then summarize the remaining companies in one entry. Do not add skills that aren't already listed in the original resume. Collect relevant skills in their own section. Then write a matching cover letter. Finally list 20 interview questions relevant to this role and potential answers. Provide no explanation or preamble. Make no comments after.\n\n<resume>\n\n" + cv + "\n\n</resume>\n\n<jobdescription>\n\n" + jd + "\n\n</jobdescription>\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
                 
                 console.log(myprompt);
 
                 streamChatCompletion([{ role: "user", content: myprompt}], { model: "openai" }, handleChunk);
             }
 
+            function Cassandra()
+            {
+                document.getElementById("cv").value = "\
+Cassandra Carlos\n\
+https://www.linkedin.com/in/cassandracarlos/\n\
+c@xyz.com\n\
+\n\
+EXPERIENCE\n\
+\n\
+Art Lead July 2024 - March 2025\n\
+Ramen Start Studios, Vancouver, BC\n\
+● Managed assets and creating structured documentation for streamlined workflow\n\
+● Built and refined a playable prototype, integrating assets and gameplay mechanics\n\
+\n\
+Kitchen Helper May 2024 - June 2024\n\
+Blue Ivy House, Vancouver, BC\n\
+● Assisted in the preparation of hundreds of meals daily for schools and senior homes\n\
+● Maintained a clean and organized workspace, adhering to health and safety standards\n\
+\n\
+Website Developer (Freelance) September 2023 - November 2023\n\
+Blue Ivy House, Vancouver, BC\n\
+● Designed and developed a custom WordPress website to enhance client visibility\n\
+● Ensured an intuitive layout and smooth navigation for users\n\
+\n\
+Part-Time Cast Member May 2019 - September 2019\n\
+Cineplex Entertainment, Richmond, BC\n\
+● Maintained concession and theater areas for smooth operations\n\
+● Provided excellent customer service and assisted patrons with purchases\n\
+\n\
+EDUCATION\n\
+Bachelor of Fine Arts, Illustration Major September 2018 – May 2023\n\
+Emily Carr University of Art and Design, Vancouver, BC\n\
+\n\
+SKILLS\n\
+● Time Management\n\
+● Organization & Attention to Detail\n\
+● Customer Service\n\
+● Teamwork & Collaboration";
+                document.getElementById("jd").value = "\
+Front End Developer\n\
+Graphically Speaking  1140 Pender Street West, Vancouver, BC\n\
+\n\
+Graphically Speaking is an industry-leading, full-service web development firm, with a full-time team of web specialists who collectively produce hundreds of websites every year.\n\
+Our Value Statements:\n\
+\n\
+    Provide great value, quality and service to our customers.\n\
+    Be a great place to work.\n\
+    Treat others as you would like to be treated.\n\
+    Act with honesty and integrity.\n\
+    Individual contribution and responsibility.\n\
+    Continuous improvement in everything we do.\n\
+\n\
+We are seeking a highly motivated, energetic, passionate individual to join our team as a Front End Developer. There is lots of room for advancement and a great environment to acquire new and refine existing skills.\n\
+About the role:\n\
+\n\
+As a Front End Developer, you will be working closely with our Project Managers and UX Designers to develop and maintain high quality websites, transform designs into working templates, estimate and manage time effectively and communicate using project management software.\n\
+You should possess the following:\n\
+\n\
+    Minimum 3-4 years experience in web development\n\
+    Expert knowledge of HTML5/CSS3/SASS/JavaScript/PHP\n\
+    High-level experience with WordPress\n\
+    Experience with WooCommerce\n\
+    Ability to deliver clean and efficient code within estimated timeline and budget\n\
+    Good understanding of mobile first and responsive programming\n\
+    Good understanding of cross-browser/cross-platform issues and web standards\n\
+    Knowledge of website optimization techniques & tools\n\
+    Experience using Adobe XD, Photoshop, Zeplin\n\
+    Experience with versioning (Git/SVN)\n\
+    Experience with command line\n\
+    Experience with working in a collaborative coding environment\n\
+    Experience on React.js is an asset but not required\n\
+    Experience with other CMS (Shopify, Sitefinity, Magento, etc.) is an asset but not required\n\
+    Degree or Diploma in New Media Design and Web Development, Computer Science or other related web development programs\n\
+\n\
+Other requirements:\n\
+\n\
+    Strong organization and communication skills\n\
+    Outstanding attention to detail and quality control\n\
+    High level of commitment to doing what you say you are going to do\n\
+    Ability and desire to execute quickly and effectively in a fast-paced environment\n\
+    Strong English skills, written and oral\n\
+\n\
+Why you would want to work here?\n\
+\n\
+    Competitive salary\n\
+    Extended medical and dental\n\
+    Flex time\n\
+    Training and an opportunity to grow and advance with a top digital agency\n\
+\n\
+Items to include when applying:\n\
+\n\
+    Cover letter\n\
+    Resumé\n\
+    Links to 3 recently completed front end web development projects\n\
+\n\
+Email application to:\n\
+\n\
+Darrell Hadden, President\n\
+darrell@graphicallyspeaking.ca";
+            }
+
+            function Michael()
+            {
+                document.getElementById("cv").value = "\
+Michael Carlos\n\
+https://ca.linkedin.com/in/mcarlos\n\
+michael.carlos@wxyz.com\n\
+123 Abc St. Vancouver, BC\n\
+(778)123-4567\n\
+\n\
+Experience\n\
+\n\
+Founder\n\
+AGI Labs Inc. (Canada)\n\
+Aug 2015 - Present\n\
+Vancouver, Canada Area\n\
+• Developing biologically plausible alternatives to backpropagation and stochastic gradient descent.\n\
+• Developing real-time, reinforcement-learning architectures that dynamically models its environment internally and self-organizes through evolutionary algorithms.\n\
+Skills: Artificial Intelligence\n\
+\n\
+CTO and Head of AI R&D\n\
+DataSolve Inc · Full-time\n\
+Feb 2024 - May 2025\n\
+Manila, National Capital Region, Philippines · Hybrid\n\
+• Developed and applied AI technology in the Philippines.\n\
+• Solutions included analytics, cybersecurity and voice/vision interfaces\n\
+Skills: Artificial Intelligence (AI) · Python (Programming Language) · C++ · JavaScript\n\
+\n\
+Sr. Engineering Manager R&D\n\
+CD PROJEKT RED · Permanent Full-time\n\
+Nov 2021 - Oct 2023 · 2 yrs\n\
+Vancouver, British Columbia, Canada\n\
+• Sr. Engineering Manager at CD Projekt Red responsible for AI projects including Story Generation, Voice Cloning, Procedural Assets & Environments, AI-Driven Physics, Motion Generation & Vision Systems.\n\
+• Prototyped AI applications for the next installments of Cyberpunk 2077 and The Witcher.\n\
+Skills: Artificial Intelligence (AI) · Python (Programming Language) · C++ · Amazon Web Services (AWS) · 3D Graphics · Game Development · Agile Methodologies · Database Development · PHP · Project Management\n\
+\n\
+R&D Manager\n\
+Wenco International Mining Systems · Permanent Full-time\n\
+Apr 2021 - Oct 2021 · 7 mos\n\
+Richmond, British Columbia, Canada\n\
+• Managed a team of 18 developers. \n\
+• Developed fleet management software for autonomous vehicles in the mining industry.\n\
+Skills: Artificial Intelligence (AI) · Architecture · C++ · Amazon Web Services (AWS) · Git · Linux · Docker · Terraform · JIRA · Confluence · Microsoft Azure\n\
+\n\
+Software Engineering Manager\n\
+DDS Wireless · Contract Full-time\n\
+Feb 2020 - Feb 2021 · 1 yr 1 mo\n\
+Richmond, British Columbia, Canada\n\
+• Managed a team that developed a booking, scheduling and dispatch system for paratransit.\n\
+• Successfully delivered to NYCT in January 2021\n\
+Skills: SQL · Amazon Web Services (AWS) · Database Development\n\
+\n\
+Software Development Manager\n\
+Vivonet (Now part of Infor)\n\
+Jul 2016 - Aug 2017 · 1 yr 2 mos\n\
+Vancouver, Canada Area\n\
+• Managed a team of 13 direct reports and 15 contractors\n\
+• Ensured on-time and high-quality delivery of multiple, simultaneous projects\n\
+Skills: SQL · Amazon Web Services (AWS) · Database Development · C++ · Java · JavaScript · PHP · iOS · Python (Programming Language)\n\
+\n\
+Director, Development\n\
+QuickMobile (now part of Cvent)\n\
+Jun 2012 - Apr 2014 · 1 yr 11 mos\n\
+Vancouver, Canada Area\n\
+• Managed a team of 35 Data and Web Services (LAMP), iOS, Android (Java), WP developers\n\
+• Managed transition to custom Agile-based methodologies and processes\n\
+• Contributed HR processes covering competency definition, career paths and training modules\n\
+• Authored induction documents to quickly ramp up new hires in each of their respective fields\n\
+• Planned organization structure and maintained production capacity to meet market demand\n\
+Skills: SQL · Database Development\n\
+\n\
+Senior R&D Manager, Technology Solutions\n\
+Nokia Corporation\n\
+2008 - Nov 2010 · 2 yrs 11 mos\n\
+• Spearheaded technology and innovation events in Canada\n\
+• Analyzed internal and external intellectual property and participated in patent reviews\n\
+• Applied predictions to product roadmaps that span multiple global teams\n\
+• Managed the University Relations Team that consisted of several staff scientists and engineers\n\
+\n\
+Manager, Games R&D Integration and Verification\n\
+Nokia Corporation\n\
+2006 - 2008 · 2 yrs\n\
+• Established a team of 12 integration engineers from scratch\n\
+• Efficiently managed multi-site teams as well as global component factories and service providers\n\
+• Led the first successful integration of the Nokia mobile store. \n\
+• Managed the integration and execution of one of the first modern mobile store purchases in history\n\
+\n\
+Manager, Software Certification – Games Platform\n\
+Nokia Corporation\n\
+2003 - 2006 · 3 yrs\n\
+• Established a team of 25 engineers from scratch\n\
+• Certified and published 50+ games to market on the NGage game deck\n\
+• Worked closely with business leaders to create the first sustainable ecommerce core for Nokia\n\
+• Created infrastructure, processes and tools from the ground up. Designed and implemented a custom test database.\n\
+\n\
+C++ Developer\n\
+Nokia Corporation\n\
+2001 - 2003 · 2 yrs\n\
+• Defined technical requirements and created design documentation\n\
+• Researched automation and unit testing tools and applied results to project\n\
+• Implemented instant messaging and presence services\n\
+• Co-founded the Nokia Aikido Club\n\
+\n\
+Software Developer\n\
+V-Tech (Canada) Ltd\n\
+2001 - 2001 · Less than a year\n\
+• Programmed software for Helio platform (C/C++).\n\
+• Maintained website and SDK before project ramp down.\n\
+• Created the Helio Integrated Development Environment for the Windows platform. Implemented several applications, e.g. eReader.\n\
+\n\
+Software Developer\n\
+Voyus Ltd. / GT Networks Inc.\n\
+1997 - 2001 · 4 yrs\n\
+• Programmed Lotus Notes Databases (Lotus Script)\n\
+• Created Palm based applications (C/Intellisync).\n\
+• Contracted by law firms to customize their databases.\n\
+• Created Palm applications for e.g. the hospitality industry and construction industry.";
+                document.getElementById("jd").value = "\
+Head of AI Research and Development – Sentinel Dynamics\n\
+• Location: Richmond, British Columbia\n\
+• Canada Salary: $250,000 - $350,000 CAD per year + performance bonuses\n\
+• Benefits: Comprehensive health and dental coverage, stock options, relocation assistance, flexible work arrangements, and access to cutting-edge research facilities\n\
+\n\
+About Sentinel Dynamics\n\
+Sentinel Dynamics is a pioneering force in artificial intelligence, dedicated to advancing AI, AGI, and ASI technologies for defence applications. Our mission is to develop predictive analytics, autonomous robotics, and next-generation AI systems to enhance national security and operational efficiency. We collaborate with government agencies, defence contractors, and leading academic institutions to push the boundaries of AI innovation.\n\
+\n\
+Role Overview\n\
+We are seeking a visionary Head of AI Research and Development to lead our elite team of scientists and engineers. This role is responsible for driving innovation, overseeing research initiatives, and ensuring the successful development of AI-driven defence solutions.\n\
+\n\
+Key Responsibilities\n\
+• Define and execute the company’s AI research strategy, focusing on AGI and ASI for defence applications\n\
+• Lead multidisciplinary teams in developing predictive models, autonomous robotics, and advanced AI architectures\n\
+• Oversee the development of AI-powered predictive threat analysis systems, capable of identifying and mitigating security risks in real time\n\
+• Spearhead research into autonomous combat robotics, enhancing unmanned ground and aerial vehicles with advanced AI-driven decision-making capabilities\n\
+• Develop AI-enhanced cyber defence systems, utilizing machine learning to detect and neutralize cyber threats before they escalate\n\
+• Collaborate with government agencies, defence contractors, and academic institutions to advance AI capabilities\n\
+• Ensure ethical AI development and compliance with national security regulations\n\
+• Oversee funding proposals, patents, and intellectual property strategies\n\
+• Stay ahead of emerging AI trends and integrate cutting-edge technologies into Sentinel Dynamics’ portfolio\n\
+\n\
+Ongoing AI Projects at Sentinel Dynamics\n\
+• Project Aegis: A next-generation AI-powered battlefield intelligence system that integrates satellite imagery, drone surveillance, and real-time data analytics to provide military commanders with actionable insights\n\
+• Project Titan: Development of autonomous robotic units designed for reconnaissance, search-and-rescue, and combat support operations\n\
+• Project Sentinel: AI-driven cybersecurity framework that leverages deep learning to predict, detect, and neutralize cyber threats targeting defence infrastructure\n\
+• Project Oracle: Advanced predictive analytics system that utilizes AI to forecast geopolitical risks, military conflicts, and strategic defence scenarios\n\
+\n\
+Qualifications\n\
+• 10+ years of experience in AI research, with a focus on defence applications\n\
+• Expertise in deep learning, reinforcement learning, and autonomous systems\n\
+• Strong leadership skills with experience managing large-scale R&D projects\n\
+• Security clearance eligibility for defence-related research\n\
+• Proven track record of published research and AI innovations\n\
+\n\
+Why Join Us?\n\
+At Sentinel Dynamics, you’ll work at the forefront of AI evolution, shaping the future of defence technology. We offer a dynamic environment, competitive compensation, and the opportunity to make a real impact on global security.";
+            }
+
+
         </script>
     </head>
-    <body>
+    <body onload="Cassandra()">
         <h2>Resume Customizer</h2>
-        <p class="subtitle">© 2025 Michael Carlos</p>
+        <p class="subtitle">© 2025 Michael Carlos</p>            
+        <label>Presets</label>
+        <button onclick="Cassandra()">Cassandra</button>
+        <button onclick="Michael()">Michael</button>
         <h2>Resume and Job Description</h2>
         <form>
             <label>Resume</label>
-            <textarea id="cv" rows="150">
-Michael Carlos
-https://ca.linkedin.com/in/mcarlos
-michael.carlos@wxyz.com
-123 Abc St. Vancouver, BC
-(778)123-4567
-
-Experience
-
-Founder
-AGI Labs Inc. (Canada)
-Aug 2015 - Present
-Vancouver, Canada Area
-• Developing biologically plausible alternatives to backpropagation and stochastic gradient descent.
-• Developing real-time, reinforcement-learning architectures that dynamically models its environment internally and self-organizes through evolutionary algorithms.
-Skills: Artificial Intelligence
-
-CTO and Head of AI R&D
-DataSolve Inc · Full-time
-Feb 2024 - May 2025
-Manila, National Capital Region, Philippines · Hybrid
-• Developed and applied AI technology in the Philippines.
-• Solutions included analytics, cybersecurity and voice/vision interfaces
-Skills: Artificial Intelligence (AI) · Python (Programming Language) · C++ · JavaScript
-
-Sr. Engineering Manager R&D
-CD PROJEKT RED · Permanent Full-time
-Nov 2021 - Oct 2023 · 2 yrs
-Vancouver, British Columbia, Canada
-• Sr. Engineering Manager at CD Projekt Red responsible for AI projects including Story Generation, Voice Cloning, Procedural Assets & Environments, AI-Driven Physics, Motion Generation & Vision Systems.
-• Prototyped AI applications for the next installments of Cyberpunk 2077 and The Witcher.
-Skills: Artificial Intelligence (AI) · Python (Programming Language) · C++ · Amazon Web Services (AWS) · 3D Graphics · Game Development · Agile Methodologies · Database Development · PHP · Project Management
-
-R&D Manager
-Wenco International Mining Systems · Permanent Full-time
-Apr 2021 - Oct 2021 · 7 mos
-Richmond, British Columbia, Canada
-• Managed a team of 18 developers. 
-• Developed fleet management software for autonomous vehicles in the mining industry.
-Skills: Artificial Intelligence (AI) · Architecture · C++ · Amazon Web Services (AWS) · Git · Linux · Docker · Terraform · JIRA · Confluence · Microsoft Azure
-
-Software Engineering Manager
-DDS Wireless · Contract Full-time
-Feb 2020 - Feb 2021 · 1 yr 1 mo
-Richmond, British Columbia, Canada
-• Managed a team that developed a booking, scheduling and dispatch system for paratransit.
-• Successfully delivered to NYCT in January 2021
-Skills: SQL · Amazon Web Services (AWS) · Database Development
-
-Software Development Manager
-Vivonet (Now part of Infor)
-Jul 2016 - Aug 2017 · 1 yr 2 mos
-Vancouver, Canada Area
-• Managed a team of 13 direct reports and 15 contractors
-• Ensured on-time and high-quality delivery of multiple, simultaneous projects
-Skills: SQL · Amazon Web Services (AWS) · Database Development · C++ · Java · JavaScript · PHP · iOS · Python (Programming Language)
-
-Director, Development
-QuickMobile (now part of Cvent)
-Jun 2012 - Apr 2014 · 1 yr 11 mos
-Vancouver, Canada Area
-• Managed a team of 35 Data and Web Services (LAMP), iOS, Android (Java), WP developers
-• Managed transition to custom Agile-based methodologies and processes
-• Contributed HR processes covering competency definition, career paths and training modules
-• Authored induction documents to quickly ramp up new hires in each of their respective fields
-• Planned organization structure and maintained production capacity to meet market demand
-Skills: SQL · Database Development
-
-Senior R&D Manager, Technology Solutions
-Nokia Corporation
-2008 - Nov 2010 · 2 yrs 11 mos
-• Spearheaded technology and innovation events in Canada
-• Analyzed internal and external intellectual property and participated in patent reviews
-• Applied predictions to product roadmaps that span multiple global teams
-• Managed the University Relations Team that consisted of several staff scientists and engineers
-
-Manager, Games R&D Integration and Verification
-Nokia Corporation
-2006 - 2008 · 2 yrs
-• Established a team of 12 integration engineers from scratch
-• Efficiently managed multi-site teams as well as global component factories and service providers
-• Led the first successful integration of the Nokia mobile store. 
-• Managed the integration and execution of one of the first modern mobile store purchases in history
-
-Manager, Software Certification – Games Platform
-Nokia Corporation
-2003 - 2006 · 3 yrs
-• Established a team of 25 engineers from scratch
-• Certified and published 50+ games to market on the NGage game deck
-• Worked closely with business leaders to create the first sustainable ecommerce core for Nokia
-• Created infrastructure, processes and tools from the ground up. Designed and implemented a custom test database.
-
-C++ Developer
-Nokia Corporation
-2001 - 2003 · 2 yrs
-• Defined technical requirements and created design documentation
-• Researched automation and unit testing tools and applied results to project
-• Implemented instant messaging and presence services
-• Co-founded the Nokia Aikido Club
-
-Software Developer
-V-Tech (Canada) Ltd
-2001 - 2001 · Less than a year
-• Programmed software for Helio platform (C/C++).
-• Maintained website and SDK before project ramp down.
-• Created the Helio Integrated Development Environment for the Windows platform. Implemented several applications, e.g. eReader.
-
-Software Developer
-Voyus Ltd. / GT Networks Inc.
-1997 - 2001 · 4 yrs
-• Programmed Lotus Notes Databases (Lotus Script)
-• Created Palm based applications (C/Intellisync).
-• Contracted by law firms to customize their databases.
-• Created Palm applications for e.g. the hospitality industry and construction industry.
-        
-            </textarea>
+            <textarea id="cv" rows="50"></textarea>
             <label>Job Description</label>
-            <textarea id="jd" rows="70">
-Head of AI Research and Development – Sentinel Dynamics
-• Location: Richmond, British Columbia
-• Canada Salary: $250,000 - $350,000 CAD per year + performance bonuses
-• Benefits: Comprehensive health and dental coverage, stock options, relocation assistance, flexible work arrangements, and access to cutting-edge research facilities
-
-About Sentinel Dynamics
-Sentinel Dynamics is a pioneering force in artificial intelligence, dedicated to advancing AI, AGI, and ASI technologies for defence applications. Our mission is to develop predictive analytics, autonomous robotics, and next-generation AI systems to enhance national security and operational efficiency. We collaborate with government agencies, defence contractors, and leading academic institutions to push the boundaries of AI innovation.
-
-Role Overview
-We are seeking a visionary Head of AI Research and Development to lead our elite team of scientists and engineers. This role is responsible for driving innovation, overseeing research initiatives, and ensuring the successful development of AI-driven defence solutions.
-
-Key Responsibilities
-• Define and execute the company’s AI research strategy, focusing on AGI and ASI for defence applications
-• Lead multidisciplinary teams in developing predictive models, autonomous robotics, and advanced AI architectures
-• Oversee the development of AI-powered predictive threat analysis systems, capable of identifying and mitigating security risks in real time
-• Spearhead research into autonomous combat robotics, enhancing unmanned ground and aerial vehicles with advanced AI-driven decision-making capabilities
-• Develop AI-enhanced cyber defence systems, utilizing machine learning to detect and neutralize cyber threats before they escalate
-• Collaborate with government agencies, defence contractors, and academic institutions to advance AI capabilities
-• Ensure ethical AI development and compliance with national security regulations
-• Oversee funding proposals, patents, and intellectual property strategies
-• Stay ahead of emerging AI trends and integrate cutting-edge technologies into Sentinel Dynamics’ portfolio
-
-Ongoing AI Projects at Sentinel Dynamics
-• Project Aegis: A next-generation AI-powered battlefield intelligence system that integrates satellite imagery, drone surveillance, and real-time data analytics to provide military commanders with actionable insights
-• Project Titan: Development of autonomous robotic units designed for reconnaissance, search-and-rescue, and combat support operations
-• Project Sentinel: AI-driven cybersecurity framework that leverages deep learning to predict, detect, and neutralize cyber threats targeting defence infrastructure
-• Project Oracle: Advanced predictive analytics system that utilizes AI to forecast geopolitical risks, military conflicts, and strategic defence scenarios
-
-Qualifications
-• 10+ years of experience in AI research, with a focus on defence applications
-• Expertise in deep learning, reinforcement learning, and autonomous systems
-• Strong leadership skills with experience managing large-scale R&D projects
-• Security clearance eligibility for defence-related research
-• Proven track record of published research and AI innovations
-
-Why Join Us?
-At Sentinel Dynamics, you’ll work at the forefront of AI evolution, shaping the future of defence technology. We offer a dynamic environment, competitive compensation, and the opportunity to make a real impact on global security.
-            </textarea>
+            <textarea id="jd" rows="70"></textarea>
         </form>
         <button onclick="go()">Customize Resume, Cover Letter and Interview Questions.</button>
         <p id="output"></p>
