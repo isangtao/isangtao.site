@@ -75,7 +75,7 @@
                 const cv = document.getElementById("cv").value;
                 const jd = document.getElementById("jd").value;
 
-                myprompt = "Using my current resume, please write a modern resume that is custom for this job description. Then write a matching cover letter. Finally list 20 interview questions relevant to this role. Provide no explanation or preamble. Make no comments after.\n\n<resume>\n\n" + cv + "\n\n</resume>\n\n<jobdescription>\n\n" + jd + "\n\n</jobdescription>\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+                myprompt = "Using my current resume, please write a modern resume that is custom for this job description. Provide a professional summary at the top. List relevant positions in full then summarize the remaining companies in one entry. Do not add skills that aren't already listed in the original resume. Then write a matching cover letter. Finally list 20 interview questions relevant to this role. Provide no explanation or preamble. Make no comments after.\n\n<resume>\n\n" + cv + "\n\n</resume>\n\n<jobdescription>\n\n" + jd + "\n\n</jobdescription>\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
                 
                 console.log(myprompt);
 
@@ -101,7 +101,7 @@ Experience
 
 Founder
 AGI Labs Inc. (Canada)
-Aug 2017 - Present
+Aug 2015 - Present
 Vancouver, Canada Area
 • Developing biologically plausible alternatives to backpropagation and stochastic gradient descent.
 • Developing real-time, reinforcement-learning architectures that dynamically models its environment internally and self-organizes through evolutionary algorithms.
