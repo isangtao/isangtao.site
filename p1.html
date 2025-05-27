@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        body {color: green; padding: 1%; background-color: black}
+        h2 {color: green}
+        form {background: black; padding: 1%; border-radius: 8px; box-shadow: 0 0 8px grey}
+        label {font-weight: bold; display: block; margin: 1px 0 1px; text-align: left; color: green}
+        input, select, textarea {width: 98%; padding: 1%; margin-bottom: 1%; border: 1px solid green; border-radius: 4px; background-color: black; color: green}
+        button {background-color: black; color: green;  border: 1px solid green; padding: 1%; margin: 1%; cursor: pointer; font-size: 16px}
+        canvas {border: 1px solid green; width: 100%; height: 100%; background-color: black}
+        p {white-space: pre-wrap; word-wrap: break-word}
+        div.scroll-container {overflow: auto; white-space: nowrap; padding: 1%}
+        div.scroll-container img {padding: 1%}
+    </style>
+    <body onload="Go()">
+        <p id="Output"></p>
+    </body>
+    <script>
+        async function StreamChatCompletion(messages, options = {}) 
+        {
+            const url = "https://text.pollinations.ai/openai";
+            const payload = {model: options.model || "openai", messages: messages, seed: options.seed, stream: true};
+            const response = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json", Accept: "text/event-stream", }, body: JSON.stringify(payload)});
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+
+            console.log("Starting stream...");
+
+            while (true) 
+            {
+                const { done, value } = await reader.read();
+                if (done) 
+                {
+                    console.log("Stream finished.");
+                    break;
+                }
+
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split("\n\n");
+                buffer = lines.pop(); 
+
+                for (const line of lines) 
+                {
+                    if (line.startsWith("data: ")) 
+                    {
+                        const dataStr = line.substring(6).trim();
+                        if (dataStr === "[DONE]") 
+                        {
+                            console.log("Received [DONE] marker.");
+                            continue; // Or handle end of stream signal
+                        }
+                        const chunk = JSON.parse(dataStr);
+                        const content = chunk?.choices?.[0]?.delta?.content;
+                        if (content) 
+                        {                
+                            outputElement = document.getElementById("Output");
+                            outputElement.textContent += content;
+                        }
+                    }
+                }
+            }
+        }
+
+        function Go()
+        {
+            MyPrompt = "What is an electron?\nSeed: " + Math.floor(Math.random() * 999999999);
+            console.log(MyPrompt);
+            StreamChatCompletion([{ role: "user", content: MyPrompt}], { model: "openai" });
+        }
+    </script>
+</html>
