@@ -64,7 +64,7 @@
 
         function Go()
         {
-            MyPrompt = "Write a fictional job description for a CTO position at an AI company. \nSeed: " + Math.floor(Math.random() * 999999999);
+            MyPrompt = "Write a fictional job description for a Principle Software Developer at an AI company. \nSeed: " + Math.floor(Math.random() * 999999999);
             console.log(MyPrompt);
             StreamChatCompletion([{ role: "user", content: MyPrompt}], { model: "openai" });
         }
