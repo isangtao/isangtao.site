@@ -73,9 +73,10 @@
                 document.getElementById("output").innerText = "";
 
                 const cv = document.getElementById("cv").value;
+                const cover = document.getElementById("cover").value;
                 const jd = document.getElementById("jd").value;
 
-                myprompt = "Using my current resume, write a modern resume that is custom for this job description. Provide a short professional summary at the top. List relevant positions in full then summarize the remaining companies in one entry. Do not add skills that aren't already listed in the original resume. Collect relevant skills in their own section. Then write a matching cover letter. Finally list 30 interview questions relevant to this role and potential answers. Provide no explanation or preamble. Make no comments after.\n\n<resume>\n\n" + cv + "\n\n</resume>\n\n<jobdescription>\n\n" + jd + "\n\n</jobdescription>\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+                myprompt = "Using my current resume, write a modern resume that is custom for this job description. Provide a short professional summary at the top. List relevant positions in full then summarize the remaining companies in one entry. Do not add skills that aren't already listed in the original resume. Collect relevant skills in their own section. Then, in the style of the sample cover letter below, write a matching cover letter. Finally list 30 interview questions relevant to this role and potential answers. Provide no explanation or preamble. Make no comments after.\n\n<resume>\n\n" + cv + "\n\n</resume>\n\n<cover>\n\n" + cover + "\n\n</cover>\n\n<jobdescription>\n\n" + jd + "\n\n</jobdescription>\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
                 
                 console.log(myprompt);
 
@@ -120,6 +121,22 @@ SKILLS\n\
 ● Organization & Attention to Detail\n\
 ● Customer Service\n\
 ● Teamwork & Collaboration";
+                document.getElementById("cover").value = "\
+Darrell Hadden  \n\
+President  \n\
+Graphically Speaking  \n\
+darrell@graphicallyspeaking.ca  \n\
+\n\
+Dear Mr. Hadden,\n\
+\n\
+I am excited to submit my application for the Front End Developer position at Graphically Speaking. With practical experience developing and delivering a custom WordPress website, coupled with my ability to collaborate closely with teams to refine user experiences and workflows, I am confident in my ability to contribute to your digital agency.\n\
+\n\
+My freelance web development work honed my skills in front-end technologies and design translation, while my role as Art Lead further developed my organization, attention to detail, and ability to execute projects efficiently. I am eager to bring my passion for clean, efficient code and user-centric design to your team and continue growing in a fast-paced, collaborative environment.\n\
+\n\
+Thank you for considering my application. I look forward to the opportunity to discuss how I can contribute to the success of Graphically Speaking.\n\
+\n\
+Sincerely,  \n\
+Cassandra Carlos";
                 document.getElementById("jd").value = "\
 Front End Developer\n\
 Graphically Speaking  1140 Pender Street West, Vancouver, BC\n\
@@ -299,6 +316,25 @@ Voyus Ltd. / GT Networks Inc.\n\
 • Created Palm based applications (C/Intellisync).\n\
 • Contracted by law firms to customize their databases.\n\
 • Created Palm applications for e.g. the hospitality industry and construction industry.";
+                document.getElementById("cover").value = "\
+Hiring Committee  \n\
+Sentinel Dynamics  \n\
+Richmond, BC  \n\
+\n\
+Dear Hiring Committee,  \n\
+\n\
+I am writing to express my strong interest in the Head of AI Research and Development position at Sentinel Dynamics. With over two decades of leading AI innovation across research and product development, particularly in reinforcement learning, autonomous systems, and advanced AI architectures, I am excited by the prospect of contributing to your mission of advancing AGI and ASI technologies in defence applications.\n\
+\n\
+Having founded AGI Labs Inc., where I develop biologically inspired alternatives to traditional AI training, and served as CTO leading AI R&D initiatives that include cybersecurity and real-time analytics, I bring a unique combination of technical depth and leadership experience. My tenure at CD Projekt Red, managing AI-driven projects like procedural generation and vision systems, sharpened my skills in steering multidisciplinary teams to deliver complex AI systems with a creative and scientific rigor applicable to defence challenges.\n\
+\n\
+My management background encompasses scaling teams, driving innovation pipelines, and aligning research with strategic objectives. I have a proven ability to collaborate with diverse stakeholders, including government entities and academic partners, to accelerate technology transfer and ensure ethical, security-compliant AI development.\n\
+\n\
+I am enthusiastic about the opportunity to lead Sentinel Dynamics’ elite AI research efforts, driving projects like autonomous robotics, predictive threat analysis, and AI-enhanced cyber defence forward. I would welcome the chance to discuss how my experiences and vision align with the company’s goals.\n\
+\n\
+Thank you for considering my application.  \n\
+\n\
+Sincerely,  \n\
+Michael Carlos";
                 document.getElementById("jd").value = "\
 Head of AI Research and Development – Sentinel Dynamics\n\
 • Location: Richmond, British Columbia\n\
@@ -477,6 +513,22 @@ Software Engineer\n\
 Education\n\
 University of Alberta\n\
 BSc Eng, Electrical Engineering • (1989 - 1994)";
+                document.getElementById("cover").value = "\
+NovaMed Innovations  \n\
+Vancouver, BC  \n\
+\n\
+Dear Hiring Team,  \n\
+\n\
+I am excited to apply for the Senior Product Manager position at NovaMed Innovations. With over two decades of experience guiding the full product lifecycle of advanced healthcare technologies, including bringing FDA-cleared medical imaging devices to market, I am confident in my ability to contribute to NovaMed’s mission of revolutionizing patient care.  \n\
+\n\
+At Sonic Incytes, I led a multi-disciplinary team to develop and commercially launch a novel ultrasound elastography device for liver disease, managing regulatory compliance, clinical integration, and market positioning. This experience, combined with my background in clinical informatics and deep knowledge of healthcare IT standards such as DICOM and HL7, aligns closely with the demands of your role.  \n\
+\n\
+My approach always centers on collaboration and maintaining a sharp focus on customer needs, balancing technical innovation with practical implementation. I thrive in fast-paced environments and have a proven entrepreneurial mindset demonstrated through co-founding a startup focused on health-environment interaction technology.  \n\
+\n\
+I am eager to bring my passion for healthcare technology product leadership to NovaMed and drive solutions that will enhance diagnostic accuracy and improve patient outcomes. Thank you for considering my application. I look forward to the opportunity to discuss how I can contribute to your team.  \n\
+\n\
+Sincerely,  \n\
+Brian Stachniak";
                 document.getElementById("jd").value = "\
 Senior Product Manager – Healthcare Technology NovaMed Innovations | Vancouver, BC\n\
 \n\
@@ -526,8 +578,10 @@ Join NovaMed Innovations and play a pivotal role in shaping the future of health
         <button onclick="Michael()">Michael</button>
         <button onclick="Brian()">Brian</button>
         <form>
-            <label>Resume</label>
+            <label>Super Resume</label>
             <textarea id="cv" rows="50"></textarea>
+            <label>Cover Letter Sample</label>
+            <textarea id="cover" rows="30"></textarea>
             <label>Job Description</label>
             <textarea id="jd" rows="70"></textarea>
         </form>
@@ -535,3 +589,4 @@ Join NovaMed Innovations and play a pivotal role in shaping the future of health
         <p id="output"></p>
     </body>
 </html>
+
