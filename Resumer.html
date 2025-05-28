@@ -76,7 +76,7 @@
                 const cover = document.getElementById("cover").value;
                 const jd = document.getElementById("jd").value;
 
-                myprompt = "Using my current resume, write a modern resume that is custom for this job description. Provide a short professional summary at the top. List relevant positions in full then summarize the remaining companies in one entry. Do not add skills that aren't already listed in the original resume. Collect relevant skills in their own section. Then, in the style of the sample cover letter below, write a matching cover letter. Finally list 30 interview questions relevant to this role and potential answers. Provide no explanation or preamble. Make no comments after.\n\n<resume>\n\n" + cv + "\n\n</resume>\n\n<cover>\n\n" + cover + "\n\n</cover>\n\n<jobdescription>\n\n" + jd + "\n\n</jobdescription>\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+                myprompt = "Using my current resume, write a modern one-page resume that is custom for this job description. Provide a short professional summary at the top. List relevant positions in full then summarize the remaining companies in one entry. Do not add skills that aren't already listed in the original resume. Collect relevant skills in their own section. Then, in the style of the sample cover letter below, write a matching cover letter. Finally list 30 interview questions relevant to this role and potential answers. Provide no explanation or preamble. Make no comments after.\n\n<resume>\n\n" + cv + "\n\n</resume>\n\n<cover>\n\n" + cover + "\n\n</cover>\n\n<jobdescription>\n\n" + jd + "\n\n</jobdescription>\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
                 
                 console.log(myprompt);
 
@@ -338,6 +338,7 @@ Michael Carlos";
                 document.getElementById("jd").value = "\
 Head of AI Research and Development – Sentinel Dynamics\n\
 • Location: Richmond, British Columbia\n\
+• Canada Salary: $250,000 - $350,000 CAD per year + performance bonuses\n\
 • Benefits: Comprehensive health and dental coverage, stock options, relocation assistance, flexible work arrangements, and access to cutting-edge research facilities\n\
 \n\
 About Sentinel Dynamics\n\
