@@ -15,6 +15,7 @@
 	    </style>
     </head>
     <body onload="Cassandra()">
+	<div id="custom">
 	    <h2>Story Teller</h2>
 	    <p class="subtitle">© 2025 Michael Carlos</p>
 	    <label>Presets</label>
@@ -27,11 +28,12 @@
 		<textarea id="details" rows="10"></textarea>
 		<label for="description">Description</label>
 		<input id="description"></input>
-		<label for="extras">Extras</label>
+		<label id="extrastitle">Extras</label>
 		<textarea id="extras" rows="5"></textarea>
 	    </form>
 	    <button id="go" onclick="Go()">Tell Story</button>
-	    <p id="Story"></p>
+	</div>
+	<p id="Story"></p>
     </body>
     <script>
         ImageCount = 30;
