@@ -64,7 +64,7 @@
 
         function Go()
         {
-            MyPrompt = "Create a website for a party that allows registration using a Firebase as a database?\nSeed: " + Math.floor(Math.random() * 999999999);
+            MyPrompt = "Create a website for a party that allows registration using a Firebase?\nSeed: " + Math.floor(Math.random() * 999999999);
             console.log(MyPrompt);
             StreamChatCompletion([{ role: "user", content: MyPrompt}], { model: "openai" });
         }
