@@ -58,7 +58,7 @@
             let imageUrl = imageUrlInput.value;
             if (imageUrl) {
                 const randomNumber = Math.floor(Math.random() * 100000) + 1;
-                imageUrl += " " + randomNumber;
+                imageUrl += "?nologo=true&seed=" + randomNumber;
                 const fullUrl = "https://image.pollinations.ai/prompt/" + imageUrl;
                 
                 imageUrls.push(fullUrl);
