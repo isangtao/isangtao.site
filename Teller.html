@@ -36,7 +36,7 @@
 	<p id="Story"></p>
     </body>
     <script>
-        ImageCount = 31;
+        ImageCount = 32;
         SpeechText = "";
         ImagePrompts = "";
         SectionFlag = 0;
@@ -144,9 +144,10 @@
             Details = document.getElementById("details").value;
             Description = document.getElementById("description").value;
             Extras = document.getElementById("extras").value;
-            StoryRequest = "Details about the protagonist of a story follows:\n" + Details + "\n\n" + Extras + " Write a long story based on the above information. Give the story a happy ending. Provide no explanation or preamble. Do not use markdown. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very long, very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown.\n\nIn the story, refer to the protagonist by his or her name, not by description. However, in the image prompts do not refer to the protagonist by his or her name or 'the man' or 'the woman'. In the image prompts you must describe the protagonist in full detail as '" + Description + "' every time. \nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
-            console.log(StoryRequest);
-            streamChatCompletion([{ role: "user", content: StoryRequest}], { model: "openai" }, handleChunk);
+            StoryRequest = "Details about the protagonist of a story follows:\n" + Details + "\n\n" + Extras + " Write a long story based on the above information. Give the story a happy ending. Provide no explanation or preamble. Do not use markdown. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very long, very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown.\n\nIn the story, refer to the protagonist by his or her name, not by description. However, in the image prompts do not refer to the protagonist by his or her name or 'the man' or 'the woman'. In the image prompts you must describe the protagonist in full detail as '" + Description + "' every time.";
+            seed = Math.floor(Math.random() * 999999999);
+            console.log(StoryRequest + " " + seed);
+            streamChatCompletion([{ role: "user", content: StoryRequest, seed: seed}], { model: "openai" }, handleChunk);
         }
 
         async function Slideshow()
@@ -157,7 +158,7 @@
 	    console.log(1 + " " + IndividualPrompts[1]);
 	    UpdateImage(1, IndividualPrompts[1]);
 
-            for(let i=2; i<ImageCount; i++)
+            for(let i=3; i<ImageCount; i++)
             {
                 setTimeout(function() 
                 { 
