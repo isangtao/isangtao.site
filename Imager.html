@@ -21,29 +21,14 @@
         justify-content: center;
     }
     img {
-        margin: 10px;
-        width: 50%;
+        margin: 10px 0;
+        width: 100%;
+        cursor: pointer;
     }
     .carousel-container {
         position: relative;
-        width: 50%;
+        width: 100%;
         margin: auto;
-    }
-    .carousel-arrow {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-        border: none;
-        padding: 10px;
-        cursor: pointer;
-    }
-    .left-arrow {
-        left: 10px;
-    }
-    .right-arrow {
-        right: 10px;
     }
 </style>
 </head>
@@ -57,16 +42,12 @@
     <figure id="image-figure" style="display: none;">
         <img id="carousel-image">
     </figure>
-    <button class="carousel-arrow left-arrow" id="left-arrow" style="display: none;">&lt;</button>
-    <button class="carousel-arrow right-arrow" id="right-arrow" style="display: none;">&gt;</button>
 </div>
 
 <script>
     const imageUrlInput = document.getElementById('imageUrl');
     const imageFigure = document.getElementById('image-figure');
     const carouselImage = document.getElementById('carousel-image');
-    const leftArrow = document.getElementById('left-arrow');
-    const rightArrow = document.getElementById('right-arrow');
 
     let imageUrls = [];
     let currentIndex = -1;
@@ -86,17 +67,23 @@
         }
     });
 
-    leftArrow.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateCarousel();
-        }
-    });
+    carouselImage.addEventListener('click', (event) => {
+        const rect = carouselImage.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const halfWidth = rect.width / 2;
 
-    rightArrow.addEventListener('click', () => {
-        if (currentIndex < imageUrls.length - 1) {
-            currentIndex++;
-            updateCarousel();
+        if (clickX < halfWidth) {
+            // Clicked on the left side
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCarousel();
+            }
+        } else {
+            // Clicked on the right side
+            if (currentIndex < imageUrls.length - 1) {
+                currentIndex++;
+                updateCarousel();
+            }
         }
     });
 
@@ -105,8 +92,6 @@
             carouselImage.src = imageUrls[currentIndex];
             carouselImage.alt = imageUrls[currentIndex];
             imageFigure.style.display = 'block';
-            leftArrow.style.display = 'block';
-            rightArrow.style.display = 'block';
         }
     }
 </script>
