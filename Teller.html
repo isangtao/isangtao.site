@@ -55,7 +55,7 @@
         function UpdateImage(Counter, Prompt)
         {
             const img = document.createElement("img");
-            img.src = "https://image.pollinations.ai/prompt/" + Prompt;
+            img.src = "https://image.pollinations.ai/prompt/" + Prompt + "?nologo=true";
             img.title = Counter + " of " + (ImageCount - 1) + " : " + Prompt;
             img.width = "500";
             img.height = "500"; 
