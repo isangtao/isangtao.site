@@ -3,98 +3,124 @@
 <head>
 <title>Image Generator</title>
 <style>
-    body {text-align: center;font-family: sans-serif; color: #111111; padding: 1%; background-color: #eeeeee}
-    h2 {color: #111111}
-    form {background: #eeeeee; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px grey}
-    label {font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; color: #111111}
-    input, select, textarea {font-family: sans-serif; width: 95%; padding: 10px; margin-bottom: 10px; border: 1px solid #111111; border-radius: 4px; background-color: #eeeeee; color: #111111}
-    button {font-family: sans-serif; background-color: #eeeeee; color: #111111;  border: 1px solid #003300; padding: 10px; margin: 5px; cursor: pointer; font-size: 16px}
-    canvas {border: 1px solid #111111; width: 100%; height: 150px; background-color: #eeeeee}
-    p {white-space: pre-wrap; word-wrap: break-word}
-    div.scroll-container {overflow: auto; white-space: nowrap; padding: 10px}
-    div.scroll-container img {padding: 10px}
-
-    #image-container {
-        margin-top: 20px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    img {
-        margin: 10px 0;
-        width: 100%;
-        cursor: pointer;
-    }
-    .carousel-container {
-        position: relative;
-        width: 100%;
-        margin: auto;
-    }
+  /* Basic styling for the page */
+  body {
+    background-color: #eeeeee; /* Light gray background */
+    color: #111111; /* Dark text color */
+    font-family: sans-serif; /* Standard sans-serif font */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Arrange items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    min-height: 100vh; /* Make the body at least the height of the viewport */
+    margin: 0; /* Remove default body margin */
+    padding: 0 20px; /* Add horizontal padding */
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  h1 {
+    margin-bottom: 0; /* Remove bottom margin from the main heading */
+  }
+  p {
+    margin-top: 5px; /* Add a small top margin to the paragraph */
+    font-size: 0.8em; /* Make the paragraph text slightly smaller */
+  }
+  /* Styling for the text input field */
+  input[type="text"] {
+    width: 100%; /* Occupy full width */
+    padding: 10px; /* Add some padding inside the input box */
+    border: 1px solid #ccc; /* Add a light gray border */
+    border-radius: 5px; /* Round the corners */
+    margin-bottom: 20px; /* Add some space below the input box */
+    font-size: 1em; /* Set the font size */
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  /* Styling for the generated image */
+  img {
+    flex-grow: 1;
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    object-fit: contain;
+    width: 100%; /* Set width to 100% of container */
+  }
 </style>
 </head>
 <body>
 
-<h2>Image Generator</h2>        
+<h2>Image Generator</h2>
 <p class="subtitle">© 2025 Michael Carlos</p>
 
-<input type="text" id="imageUrl" placeholder="Enter image prompt, press enter and wait a few seconds." size="60">
-
-<div class="carousel-container">
-    <figure id="image-figure" style="display: none;">
-        <img id="carousel-image">
-    </figure>
-</div>
+<!-- Input field for the user to enter their image prompt -->
+<input type="text" id="promptInput" placeholder="Prompt">
+<!-- Image tag to display the generated image -->
+<img id="generatedImage" src="" alt="Enter a prompt and press Enter">
 
 <script>
-    const imageUrlInput = document.getElementById('imageUrl');
-    const imageFigure = document.getElementById('image-figure');
-    const carouselImage = document.getElementById('carousel-image');
+  // Get references to the input and image elements from the DOM
+  const promptInput = document.getElementById('promptInput');
+  const generatedImage = document.getElementById('generatedImage');
 
-    let imageUrls = [];
-    let currentIndex = -1;
+  // Initialize an array to store the history of generated image URLs
+  let imageHistory = [];
+  // Initialize an index to keep track of the current image in the history
+  let currentIndex = -1;
 
-    imageUrlInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            let imageUrl = imageUrlInput.value;
-            if (imageUrl) {
-                const randomNumber = Math.floor(Math.random() * 100000) + 1;
-                imageUrl += "?nologo=true&seed=" + randomNumber;
-                const fullUrl = "https://image.pollinations.ai/prompt/" + imageUrl;
-                
-                imageUrls.push(fullUrl);
-                currentIndex = imageUrls.length - 1;
-                updateCarousel();
-            }
-        }
-    });
+  // Add an event listener to the input field to detect when a key is pressed
+  promptInput.addEventListener('keydown', (event) => {
+    // Check if the key pressed was the 'Enter' key
+    if (event.key === 'Enter') {
+      // Get the prompt text from the input field
+      const prompt = promptInput.value;
+      // Proceed only if the prompt is not empty
+      if (prompt) {
+        // Reset the image src and alt text to show the loading indicator
+        generatedImage.src = '';
+        generatedImage.alt = 'Generating image...';
 
-    carouselImage.addEventListener('click', (event) => {
-        const rect = carouselImage.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const halfWidth = rect.width / 2;
-
-        if (clickX < halfWidth) {
-            // Clicked on the left side
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateCarousel();
-            }
-        } else {
-            // Clicked on the right side
-            if (currentIndex < imageUrls.length - 1) {
-                currentIndex++;
-                updateCarousel();
-            }
-        }
-    });
-
-    function updateCarousel() {
-        if (currentIndex >= 0) {
-            carouselImage.src = imageUrls[currentIndex];
-            carouselImage.alt = imageUrls[currentIndex];
-            imageFigure.style.display = 'block';
-        }
+        // Generate a random seed to get different images for the same prompt
+        const seed = Math.floor(Math.random() * 100000);
+        // Construct the image URL using the Pollinations.ai API
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?nologo=true&seed=${seed}`;
+        
+        // Add the new image URL to our history
+        imageHistory.push(imageUrl);
+        // Update the current index to point to the new image
+        currentIndex = imageHistory.length - 1;
+        
+        // Set the 'src' of the image element to the new URL, causing it to display the new image
+        generatedImage.src = imageUrl;
+      }
     }
+  });
+
+  // Add an event listener to the image to handle clicks
+  generatedImage.addEventListener('click', (event) => {
+    // Only allow navigation if there's more than one image in the history
+    if (imageHistory.length > 1) {
+      // Get the position and size of the image element
+      const rect = generatedImage.getBoundingClientRect();
+      // Calculate the horizontal position of the click relative to the image
+      const clickX = event.clientX - rect.left;
+      
+      // Check if the click was on the left half of the image
+      if (clickX < rect.width / 2) {
+        // If so, go to the previous image in the history (and wrap around if at the beginning)
+        currentIndex = (currentIndex - 1 + imageHistory.length) % imageHistory.length;
+      } else {
+        // If the click was on the right half, go to the next image (and wrap around if at the end)
+        currentIndex = (currentIndex + 1) % imageHistory.length;
+      }
+      
+      // Update the image source to display the image from the history at the new index
+      generatedImage.src = imageHistory[currentIndex];
+    }
+  });
+
+  // When the image has loaded, change the alt text back
+  generatedImage.onload = () => {
+    generatedImage.alt = '...';
+  };
 </script>
 
 </body>
