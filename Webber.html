@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="Instructions">
+		        <label style="font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; color: #111111">Design Prompt</label>
+                <textarea id="DesignPrompt" rows="10" style="font-family: sans-serif; width: 95%; padding: 10px; margin-bottom: 10px; border: 1px solid #111111; border-radius: 4px; background-color: #eeeeee; color: #111111">
+Create a responsive, aesthetically-pleasing, one-file website based on the following company information. Re-write and expand on the descriptions below to make the company interesting. Do not just list out the information verbatum.
+
+Use embedded boxes with glowing borders for each section. Use relevant icons for bullets lists. Keep widths consistent. Keep fonts consistent in size and color. Be consistent with the accent for the overall site. Add a copyright at the bottom using the company name for the year 2025.
+
+Use Javascript to add animations and inline CSS to make the page look professional. Provide no explanation or preamble. Don't use markdown. Only write tags that are meant to be between the <body> </body> tag. Never use double quotes, use single quotes instead.
+                </textarea>
+		        <label style="font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; color: #111111">Website Details</label>
+                <textarea id="CompanyDetails" rows="20" style="font-family: sans-serif; width: 95%; padding: 10px; margin-bottom: 10px; border: 1px solid #111111; border-radius: 4px; background-color: #eeeeee; color: #111111">
+# Company name: AGI Labs
+
+## Vision
+* I see a world where AI and humans co-exist in harmony and are able to do and make anything, anytime.
+
+## Mission
+* Invent real-time continuous learning algorithms using reinforcement learning and evolutionary mechanisms.
+
+## Objective
+* to create a general-purpose AI which can adapt to any situation in real-time. We prefer biologically plausible alternatives over backpropagation and stochastic gradient descent\n\
+
+## Products
+* General Purpose Adaptive Controllers (GPAC™) which employ our proprietary Dragon's Whip Technology (DWT™)
+
+## Operation Strategy:
+* Be radical. Lead, don't follow. Don't waste time on the ordinary.
+* Deliver only high-quality products. Set realistic expectations and exceed them.
+* Invest only in scalable technologies.
+* Destroy, then rebuild, quickly and frequently.
+
+## The founder, Michael Carlos, developed software professionally for three decades and managed development teams for over two decades. Michael has been studying Artificial Intelligence (AI) and Artificial Life (AL) since the mid 90s. He has extensive experience in writing code, architecture, requirements management, systems analysis and documentation. His interests include artificial intelligence, robotics, game technology, physics and genetics. This combination of experience and knowledge puts him in an ideal position to start a company in the AI domain.
+                </textarea>
+                <button onclick="Go()" style="font-family: sans-serif; background-color: #eeeeee; color: #111111;  border: 1px solid #003300; padding: 10px; margin: 5px; cursor: pointer; font-size: 16px">Create website</button>
+        </div>
+    </body>
+    <script>
+
+        async function StreamChatCompletion(messages, options = {}) 
+        {
+            Seed = Math.floor(Math.random() * 999999999);
+            Body = "";
+            const url = "https://text.pollinations.ai/openai";
+            const payload = {model: options.model || "openai", messages: messages, seed: Seed, stream: true};
+            const response = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json", Accept: "text/event-stream", }, body: JSON.stringify(payload)});
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+
+            while (true) 
+            {
+                const { done, value } = await reader.read();
+                if (done) 
+                {
+                    console.log("<!DOCTYPE html><html><body>" + Body + "</body></html>");
+                    break;
+                }
+
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split("\n\n");
+                buffer = lines.pop(); 
+
+                for (const line of lines) 
+                {
+                    if (line.startsWith("data: ")) 
+                    {
+                        const dataStr = line.substring(6).trim();
+                        if (dataStr === "[DONE]") 
+                        {
+                            continue; // Or handle end of stream signal
+                        }
+                        const chunk = JSON.parse(dataStr);
+                        const content = chunk?.choices?.[0]?.delta?.content;
+                        if (content) 
+                        {   
+                            if (content.includes("---"))
+                            {
+                                console.log(Body);
+                                console.log("\n\nad purged");
+                                return;
+                            }
+                            Body += content;         
+                            document.body.innerHTML = Body; 
+                        }
+                    }
+                }
+            }
+        }
+
+        function Go()
+        {
+            DesignPrompt = document.getElementById("DesignPrompt").value;
+            CompanyDetails = document.getElementById("CompanyDetails").value;
+            MyPrompt = DesignPrompt + CompanyDetails;
+            document.getElementById("Instructions").hidden = true;
+            StreamChatCompletion([{ role: "user", content: MyPrompt}], { model: "openai" });
+        }
+
+    </script>
+</html>
