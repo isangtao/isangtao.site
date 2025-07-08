@@ -70,8 +70,9 @@
 
         async function streamChatCompletion(messages, options = {}, onChunkReceived) 
         {
+            seednumber = Math.floor(Math.random() * 999999999);
             const url = "https://text.pollinations.ai/openai";
-            const payload = {model: options.model || "openai", messages: messages, seed: options.seed, stream: true};
+            const payload = {model: options.model || "openai", messages: messages, seed: seednumber, stream: true};
             const response = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json", Accept: "text/event-stream", }, body: JSON.stringify(payload)});
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
@@ -145,9 +146,8 @@
             Description = document.getElementById("description").value;
             Extras = document.getElementById("extras").value;
             StoryRequest = "Details about the protagonist of a story follows:\n" + Details + "\n\n" + Extras + " Write a long story based on the above information. Give the story a happy ending. Provide no explanation or preamble. Do not use markdown. Just state the title and jump into the story. After, write the line --- then provide " + ImageCount + " very long, very descriptive image generation prompts that depict important moments in the story. Treat each image prompt as stand-alone and independent. Write out the full visual descriptions of each character. Do not number the image prompts or use markdown.\n\nIn the story, refer to the protagonist by his or her name, not by description. However, in the image prompts do not refer to the protagonist by his or her name or 'the man' or 'the woman'. In the image prompts you must describe the protagonist in full detail as '" + Description + "' every time.";
-            seed = Math.floor(Math.random() * 999999999);
-            console.log(StoryRequest + " " + seed);
-            streamChatCompletion([{ role: "user", content: StoryRequest, seed: seed}], { model: "openai" }, handleChunk);
+            console.log(StoryRequest);
+            streamChatCompletion([{ role: "user", content: StoryRequest}], { model: "openai" }, handleChunk);
         }
 
         async function Slideshow()
