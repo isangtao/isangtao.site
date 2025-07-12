@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruit Entries</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        #entries-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .entry {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .entry:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fruit Descriptions</h1>
+    <div id="entries-container"></div>
+
+    <script>
+        fetch('entries.txt')
+            .then(response => response.text())
+            .then(text => {
+                const entriesContainer = document.getElementById('entries-container');
+                const entries = text.split('\n\n');
+                entries.forEach(entryText => {
+                    if (entryText.trim() !== '') {
+                        const entryDiv = document.createElement('div');
+                        entryDiv.className = 'entry';
+                        entryDiv.textContent = entryText;
+                        entriesContainer.appendChild(entryDiv);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching entries:', error);
+                const entriesContainer = document.getElementById('entries-container');
+                entriesContainer.textContent = 'Could not load fruit entries.';
+            });
+    </script>
+</body>
+</html>
