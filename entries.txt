@@ -14,7 +14,7 @@ Pineapples are tropical fruits with a tough, spiky outer skin and sweet, golden-
 
 Mangoes are tropical stone fruits with a sweet, fragrant, and juicy flesh. Their skin color ranges from green to red to yellow-orange. Mangoes are rich in vitamins A, C, and E. They are delicious eaten on their own, in smoothies, or as part of salads and chutneys.
 
-Grapes grow in clusters on vines and come in various colors, including green, red, and black. They can be sweet or tart and are eaten fresh, dried to make raisins, or fermented to produce wine. Grapes are a good source of vitamins C and K.
+grps grow in clusters on vines and come in various colors, including green, red, and black. They can be sweet or tart and are eaten fresh, dried to make raisins, or fermented to produce wine. Grapes are a good source of vitamins C and K.
 
 Peaches are soft, fuzzy-skinned fruits with a sweet, juicy, and aromatic flesh. They have a single large seed in the center. Peaches are a good source of vitamins C and A. They are wonderful when eaten fresh, grilled, or baked into cobblers and pies.
 
