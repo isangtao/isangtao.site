@@ -25,18 +25,13 @@
         <input type="text" id="partyA" name="partyA" required>
 
         <label for="partyB">Party B (Developer/Freelancer Name)</label>
-        <input type="text" id="partyB" name="partyB" value="Michael Carlos / AGI Labs Inc." required>
+        <input type="text" id="partyB" name="partyB" value="Cassandra Carlos / Freelancer" required>
 
         <label for="jurisdiction">Jurisdiction</label>
         <input type="text" id="jurisdiction" name="jurisdiction" value="British Columbia, Canada">
         
         <label for="projectScope">Project Scope</label>
-        <select id="projectScope" name="projectScope">
-            <option>Website</option>
-            <option>Web App</option>
-            <option>Mobile App</option>
-            <option>AI Application</option>
-        </select>
+        <input id="projectScope" name="projectScope" value="Website">
 
         <label for="deliverables">Deliverables & Milestones</label>
         <textarea id="deliverables" name="deliverables" rows="6">
@@ -49,18 +44,17 @@ Each milestone is subject to client review and approval before proceeding to the
 
         <label for="paymentTerms">Payment Terms</label>
         <textarea id="paymentTerms" name="paymentTerms" rows="6">
-The total project cost is $1,000, payable in three installments:
-30% ($300) upfront upon contract signing.
-40% ($400) upon completion of Phase 2.
-30% ($300) upon final delivery and approval.
+The total project cost is $500, payable in two installments:
+50% ($250) upfront upon contract signing.
+50% ($250) upon final delivery and approval.
 Payment is due within 14 days of invoice issuance.
         </textarea>
 
         <label for="ipOwnership">Intellectual Property (IP) Ownership</label>
         <select id="ipOwnership" name="ipOwnership">
-            <option selected>Developer retains rights</option>
+            <option selected>Developer retains full rights</option>
             <option>Shared ownership</option>
-            <option>Client owns full rights</option>
+            <option>Client owns rights to project data</option>
         </select>
 
         <label for="confidentiality">Confidentiality Agreement Duration</label>
@@ -95,6 +89,12 @@ In the event of a dispute, both parties agree to attempt resolution through medi
         <textarea id="terminationClause" name="terminationClause" rows="6">
 Either party may terminate this agreement with 30 days’ written notice. If termination occurs after work has commenced, fees for completed work must be paid in full.
         </textarea>
+
+        <label for="others">Others</label>
+        <textarea id="others" name="others" rows="6">
+Developers retains the right to include the works in portfolio.
+        </textarea>
+
     </form>
     <label style="color:red">LEGAL DISCLAIMER: This document is provided for informational purposes only and does not constitute legal advice. Parties are encouraged to consult a qualified attorney to ensure compliance with applicable laws and to tailor agreements to their specific needs.</label>
     <button type="button" onclick="go()">Generate templates for an NDA, Contract, Invoice and Receipt</button>
@@ -103,8 +103,9 @@ Either party may terminate this agreement with 30 days’ written notice. If ter
     <script>
         async function streamChatCompletion(messages, options = {}, onChunkReceived) 
         {
+            seed = Math.floor(Math.random() * 999999999);
             const url = "https://text.pollinations.ai/openai";
-            const payload = {model: options.model || "openai", messages: messages, seed: options.seed, private: true, stream: true};
+            const payload = {model: options.model || "openai", messages: messages, seed: seed, private: true, stream: true};
             const response = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json", Accept: "text/event-stream", }, body: JSON.stringify(payload)});
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
@@ -169,9 +170,10 @@ Either party may terminate this agreement with 30 days’ written notice. If ter
             "\nLiability & Indemnification: " + document.getElementById("liability").value + 
             "\nChange Management: " + document.getElementById("changeManagement").value + 
             "\nDispute Resolution: " + document.getElementById("disputeResolution").value + 
-            "\nTermination Clause: " + document.getElementById("terminationClause").value;
+            "\nTermination Clause: " + document.getElementById("terminationClause").value; + 
+            "\nOthers: " + document.getElementById("others").value;
 
-            myprompt=context + "\n\nUsing the details above, write a comprehensive NDA, contract, invoice template and reciept template. Provide no explanation or preamble. State a legal disclaimer after.\nSeed: " + Math.floor(Math.random() * 999999999) + "\n\n";
+            myprompt=context + "\n\nUsing the details above, write a comprehensive NDA (protecting the developer's IP), contract, invoice template and reciept template. Provide no explanation or preamble. State a legal disclaimer after.\n";
 
             console.log(myprompt);
 
