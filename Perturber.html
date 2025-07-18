@@ -136,10 +136,12 @@
             const targetChar = targetPhrase[currentIndex];
             const currentError = Math.abs(originalChar.charCodeAt(0) - targetChar.charCodeAt(0));
 
-            const charCodePlus = originalChar.charCodeAt(0) + 1;
+            const randomAmountPlus = Math.floor(Math.random() * 5) + 1;
+            const charCodePlus = originalChar.charCodeAt(0) + randomAmountPlus;
             const errorPlus = Math.abs(charCodePlus - targetChar.charCodeAt(0));
 
-            const charCodeMinus = originalChar.charCodeAt(0) - 1;
+            const randomAmountMinus = Math.floor(Math.random() * 5) + 1;
+            const charCodeMinus = originalChar.charCodeAt(0) - randomAmountMinus;
             const errorMinus = Math.abs(charCodeMinus - targetChar.charCodeAt(0));
 
             let bestCharCode = originalChar.charCodeAt(0);
