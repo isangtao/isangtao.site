@@ -19,8 +19,9 @@
 
             async function streamChatCompletion(messages, options = {}, onChunkReceived) 
             {
+                seednumber = Math.floor(Math.random() * 999999999);
                 const url = "https://text.pollinations.ai/openai";
-                const payload = {model: options.model || "openai", messages: messages, seed: options.seed, private: true, stream: true};
+                const payload = {model: options.model || "openai", messages: messages, seed: seednumber, private: true, stream: true};
                 const response = await fetch(url, {method: "POST", headers: {"Content-Type": "application/json", Accept: "text/event-stream", }, body: JSON.stringify(payload)});
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
@@ -375,5 +376,6 @@ At Sentinel Dynamics, you’ll work at the forefront of AI evolution, shaping th
         <p id="output"></p>
     </body>
 </html>
+
 
 
