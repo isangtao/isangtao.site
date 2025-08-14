@@ -94,11 +94,12 @@
         case 'DOWN': head.y++; break;
       }
 
-      // Wall collision
-      if (head.x < 0 || head.x >= size || head.y < 0 || head.y >= size) {
-        endGame();
-        return;
-      }
+      // Wrap around edges
+      if (head.x < 0) head.x = size - 1;
+      if (head.x >= size) head.x = 0;
+      if (head.y < 0) head.y = size - 1;
+      if (head.y >= size) head.y = 0;
+
       // Self collision
       if (snake.some(seg => seg.x === head.x && seg.y === head.y)) {
         endGame();
