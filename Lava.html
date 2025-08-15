@@ -34,13 +34,8 @@
         renderer.setPixelRatio(window.devicePixelRatio);
         document.body.appendChild(renderer.domElement);
 
-        // Lighting
-        const lightAbove = new THREE.PointLight(0xffffff, 400, 100);
-        lightAbove.position.set(0, 20, 0);
-        scene.add(lightAbove);
-
-        const lightBelow = new THREE.PointLight(0x00aaff, 400, 100);
-        lightBelow.position.set(0, -20, 0);
+        const lightBelow = new THREE.PointLight(0x00aaff, 800, 100);
+        lightBelow.position.set(0, -10, 0);
         scene.add(lightBelow);
 
         const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x00aaff, 2);
