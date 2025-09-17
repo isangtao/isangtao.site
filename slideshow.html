@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In Loving Memory</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: sans-serif;
+        }
+
+        #slideshow-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #slideshow-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            opacity: 0; /* Start invisible */
+        }
+
+        /* --- Animation Styles --- */
+        
+        /* Fade In */
+        .fade-in {
+            animation: fadeIn 1.5s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Slide from Right */
+        .slide-from-right {
+            animation: slideFromRight 1.5s forwards;
+        }
+        @keyframes slideFromRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Slide from Left */
+        .slide-from-left {
+            animation: slideFromLeft 1.5s forwards;
+        }
+        @keyframes slideFromLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Zoom In */
+        .zoom-in {
+            animation: zoomIn 1.5s forwards;
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Ken Burns Effect (Slow Pan/Zoom) */
+        .ken-burns {
+            animation: kenBurns 8s forwards;
+        }
+        @keyframes kenBurns {
+            0% {
+                transform: scale(1) translate(0, 0);
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.15) translate(-3%, 2%);
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="slideshow-container">
+        <img id="slideshow-image" src="" alt="In Loving Memory">
+    </div>
+
+    <script>
+        // --- Configuration ---
+
+        // 1. Add your photo file names to this list.
+        //    The photos should be in a folder named "pictures".
+        const images = [
+            "010.JPG",
+            "P1000687.JPG",
+            "P1010597.JPG",
+            "P1020427.JPG",
+            "P1020542.JPG",
+            "P1020612.JPG",
+            "3.png",
+            "P1000694.JPG",
+            "P1010609.JPG",
+            "P1020428.JPG",
+            "P1020548.JPG",
+            "P1020618.JPG",
+            "capture007009.jpg",
+            "P1000698.JPG",
+            "P1010621.JPG",
+            "P1020431.JPG",
+            "P1020565.JPG",
+            "P1020619.JPG",
+            "Image(42).jpg",
+            "P1000713.JPG",
+            "P1010723.JPG",
+            "P1020450.JPG",
+            "P1020570.JPG",
+            "TROUT.JPG",
+            "IMG_0295_2_1.jpg",
+            "P1000843.JPG",
+            "P1010914.JPG",
+            "P1020465.JPG",
+            "P1020583.JPG",
+            "P1000305.JPG",
+            "P1010143.JPG",
+            "P1010920.JPG",
+            "P1020508.JPG",
+            "P1020589.JPG",
+            "P1000584.JPG",
+            "P1010339.JPG",
+            "P1020425.JPG",
+            "P1020519.JPG",
+            "P1020606.JPG"
+            // Add more image file names here
+        ];
+
+        // 2. Set how long each slide is visible (in milliseconds).
+        //    5000ms = 5 seconds.
+        const slideDuration = 5000;
+
+        // --- Slideshow Logic (No need to edit below this line) ---
+
+        const imageElement = document.getElementById('slideshow-image');
+        const imageDirectory = 'pictures/';
+        let currentImageIndex = -1;
+
+        const transitions = [
+            'fade-in',
+            'slide-from-right',
+            'slide-from-left',
+            'zoom-in',
+            'ken-burns'
+        ];
+
+        function showNextImage() {
+            if (images.length === 0) {
+                console.error("No images found in the 'images' array.");
+                return;
+            }
+
+            // Move to the next image, looping back to the start
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            
+            // Get a random transition style
+            const randomTransition = transitions[Math.floor(Math.random() * transitions.length)];
+
+            // Reset animation by removing all classes
+            imageElement.className = '';
+            
+            // A trick to force the browser to restart the animation
+            void imageElement.offsetWidth; 
+
+            // Set the new image source and apply the new animation class
+            imageElement.src = imageDirectory + images[currentImageIndex];
+            imageElement.classList.add(randomTransition);
+        }
+
+        // Start the slideshow
+        showNextImage(); // Show the first image immediately
+        setInterval(showNextImage, slideDuration);
+
+    </script>
+
+</body>
+</html>
