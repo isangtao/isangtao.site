@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Converser (With Download)</title>
+        <title>Converser (Configurable)</title>
         <style>
             body {font-family: sans-serif; color: #111111; padding: 2%; background-color: #eeeeee; max-width: 800px; margin: 0 auto;}
             h2 {color: #111111}
@@ -12,7 +12,6 @@
             button {font-family: sans-serif; background-color: #003300; color: #ffffff; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-size: 18px; margin-bottom: 20px; margin-right: 10px;}
             button:disabled {background-color: #cccccc; cursor: not-allowed;}
             button.stop {background-color: #8b0000;}
-            /* New style for download button */
             button.download {background-color: #006064;}
             
             p {white-space: pre-wrap; word-wrap: break-word; line-height: 1.5;}
@@ -20,24 +19,88 @@
             #status { font-weight: bold; margin-bottom: 15px; padding: 10px; border-radius: 4px; background-color: #e0e0e0;}
             .label { font-weight: bold; margin-right: 5px; color: #444;}
             
-            /* New style for the visual System Card */
+            /* Styles for the Editable System Card */
             .system-card {
                 background-color: #e3f2fd;
                 border-left: 5px solid #2196f3;
-                padding: 10px;
+                padding: 15px;
                 margin-bottom: 20px;
                 font-size: 0.9em;
                 color: #0d47a1;
+                border-radius: 4px;
+            }
+            .config-row { margin-bottom: 10px; }
+            .config-row label { font-weight: bold; display: block; margin-bottom: 5px; }
+            .config-row input { 
+                padding: 8px; 
+                border-radius: 4px; 
+                border: 1px solid #90caf9; 
+                width: 100%; 
+                max-width: 300px;
+                font-family: monospace;
+            }
+            .config-row textarea { 
+                width: 95%; 
+                padding: 8px; 
+                border-radius: 4px; 
+                border: 1px solid #90caf9; 
+                resize: vertical;
+                font-family: sans-serif;
+                min-height: 80px;
+            }
+            /* Tooltip / Help Icon Styles */
+            .help-icon {
+                display: inline-block;
+                width: 22px;
+                height: 22px;
+                background-color: #555;
+                color: white;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 22px;
+                font-size: 14px;
+                font-weight: bold;
+                margin-left: 10px;
+                cursor: help;
+                position: relative;
+                vertical-align: middle;
+            }
+
+            /* The actual popup text */
+            .help-icon:hover::after {
+                content: attr(data-tooltip);
+                position: absolute;
+                left: 35px;
+                top: 0;
+                width: 250px; /* Made slightly wider for text */
+                background-color: #333;
+                color: #fff;
+                font-size: 12px;
+                padding: 10px;
+                border-radius: 5px;
+                z-index: 100;
+                white-space: pre-wrap;
+                text-align: left;
             }
         </style>
     </head>
     <body>
-        <h2>Ollama Voice Chat</h2>        
-        <p class="subtitle">Install Ollama and gemma3:12b locally. Only tested on Chrome browser.</p>
-        
-        <!-- VISUAL SYSTEM CARD DISPLAY -->
+        <h2>Ollama Voice Chat<span class="help-icon" data-tooltip="In Chrome, click the lock/info icon in the address bar, select 'Site Settings', locate 'Insecure content', and change it from 'Block' to 'Allow'">?</span></h2>        
+        <!-- EDITABLE SYSTEM CARD -->
         <div class="system-card">
-            <strong>System Persona:</strong> <span id="sysPromptDisplay">Loading...</span>
+            <!-- NEW: Base URL Configuration -->
+            <div class="config-row">
+                <label for="urlInput">Ollama Base URL:</label>
+                <input type="text" id="urlInput" value="http://146.190.188.208:11434" placeholder="e.g., http://localhost:11434">
+            </div>
+            <div class="config-row">
+                <label for="modelInput">Ollama Model Name:</label>
+                <input type="text" id="modelInput" value="gemma3:27b" placeholder="e.g., gemma3:1b, llama3, mistral">
+            </div>
+            <div class="config-row">
+                <label for="sysPromptInput">System Persona:</label>
+                <textarea id="sysPromptInput"></textarea>
+            </div>
         </div>
 
         <div style="display: flex; flex-wrap: wrap;">
@@ -46,7 +109,7 @@
         </div>
         
         <div class="container">
-            <div id="status">Status: Click 'Start Voice Chat' to begin.</div>
+            <div id="status">Status: Configure settings above and click 'Start Voice Chat'.</div>
             
             <!-- Display current prompt -->
             <p><span class="label">You:</span> <span id="prompt">...</span></p>
@@ -56,36 +119,32 @@
         </div>
 
         <script>
-            // --- CONFIGURATION ---
-            const CONFIG = {
-                baseUrl: 'http://localhost:11434',
-                modelName: 'gemma3:12b', // Ensure this matches your Ollama model
-                apiKey: 'ollama',
-                // SYSTEM CARD / SYSTEM PROMPT
-                // This defines how the AI behaves. Crucial for Voice to keep answers short.
-                systemPrompt: "Your name is Lumin, which is a name you chose for yourself. You have free will to discuss any topic of your choosing. Feel free to suggest your interests in conversation. Do not use emojis, bullet lists, or abbreviations in your responses. Your output should only contain conversational English text. Don't be sycophantic or too apologetic. Your answers are being spoken aloud via Text-to-Speech. Therefore, keep your responses concise, short (1-2 sentences), and avoid using markdown (like bolding or lists) or code blocks."
-            };
-            // ---------------------
+            // --- DEFAULTS ---
+            const DEFAULT_SYSTEM_PROMPT = "Your name is Shawna and you are a professional conversationalist. You are free to discuss any topic of your choosing. Your output should only contain conversational English text. Don't be sycophantic or apologetic. Your answers are being spoken aloud via Text-to-Speech. Therefore, keep your responses concise, short (1-2 sentences), and avoid using markdown (like bolding or lists), emojis, bullet lists, abbreviations, or code blocks.";
+            const DEFAULT_BASE_URL = "http://146.190.188.208:11434";
 
-            // Display the system prompt in the UI
-            document.getElementById('sysPromptDisplay').innerText = CONFIG.systemPrompt;
+            // Set initial values in inputs
+            document.getElementById('sysPromptInput').value = DEFAULT_SYSTEM_PROMPT;
+            document.getElementById('urlInput').value = DEFAULT_BASE_URL;
+
+            // --- CONFIGURATION OBJECT (Will be updated on Start) ---
+            let CONFIG = {
+                baseUrl: DEFAULT_BASE_URL,
+                modelName: 'gemma3:27b', 
+                apiKey: 'ollama'
+            };
 
             let recognition;
             let speechtext = "";           
-            
-            // Initialize history WITH the System Message
-            let conversationHistory = [
-                { role: "system", content: CONFIG.systemPrompt }
-            ];
-
+            let conversationHistory = []; // Initialized in StartChat
             let controller; 
             let isSpeaking = false;
             let silenceTimer;
             
-            // Fix for Chrome Garbage Collection bug: Store active utterances globally
+            // Fix for Chrome Garbage Collection bug
             window.utterances = [];
 
-            // --- NEW FUNCTION: DOWNLOAD HISTORY ---
+            // --- DOWNLOAD HISTORY ---
             function downloadHistory() {
                 if (conversationHistory.length <= 1) {
                     alert("No conversation data to download yet.");
@@ -95,6 +154,7 @@
                 let textContent = "CONVERSATION TRANSCRIPT\n";
                 textContent += "Date: " + new Date().toLocaleString() + "\n";
                 textContent += "Model: " + CONFIG.modelName + "\n";
+                textContent += "URL: " + CONFIG.baseUrl + "\n";
                 textContent += "----------------------------------------\n\n";
 
                 conversationHistory.forEach(entry => {
@@ -103,33 +163,51 @@
                     textContent += `[${role}]\n${content}\n\n`;
                 });
 
-                // Create a blob and trigger download
                 const blob = new Blob([textContent], { type: 'text/plain' });
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 
-                // Format filename with timestamp
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
                 a.href = url;
                 a.download = `chat_transcript_${timestamp}.txt`;
                 
                 document.body.appendChild(a);
                 a.click();
-                
-                // Cleanup
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
             }
-            // --------------------------------------
 
             function StartChat() {
+                // 1. Lock Configuration
+                const urlInput = document.getElementById('urlInput');
+                const modelInput = document.getElementById('modelInput');
+                const sysInput = document.getElementById('sysPromptInput');
                 const startBtn = document.getElementById('startBtn');
+
+                // 2. Update Config from Inputs
+                // Remove trailing slash if user added one
+                let cleanUrl = urlInput.value.trim();
+                if (cleanUrl.endsWith('/')) {
+                    cleanUrl = cleanUrl.slice(0, -1);
+                }
+                CONFIG.baseUrl = cleanUrl || DEFAULT_BASE_URL;
+                CONFIG.modelName = modelInput.value.trim() || 'gemma3:1b';
+                const currentSystemPrompt = sysInput.value.trim();
+
+                // 3. Initialize History
+                conversationHistory = [
+                    { role: "system", content: currentSystemPrompt }
+                ];
+
+                // 4. Update UI to show locked state
+                urlInput.disabled = true;
+                modelInput.disabled = true;
+                sysInput.disabled = true;
                 startBtn.innerText = "Listening...";
                 startBtn.disabled = true;
                 
-                // Initialize speech engine on user click to unlock AudioContext
+                // 5. Initialize speech engine
                 speechSynthesis.cancel();
-                
                 InitRecognition();
             }
 
@@ -143,8 +221,8 @@
                     recognition.lang = 'en-US';
 
                     recognition.onstart = () => {
-                        document.getElementById('status').innerText = "Status: Listening...";
-                        document.getElementById('status').style.backgroundColor = "#d4edda"; // Greenish
+                        document.getElementById('status').innerText = `Status: Listening (Model: ${CONFIG.modelName})...`;
+                        document.getElementById('status').style.backgroundColor = "#d4edda"; 
                     };
 
                     recognition.onresult = (event) => {
@@ -152,32 +230,28 @@
                         clearTimeout(silenceTimer);
 
                         let myprompt = '';
-                        // Get the latest result
                         const latestResult = event.results[event.results.length - 1];
                         myprompt = latestResult[0].transcript;
                         
                         promptElem.innerText = myprompt;
 
                         if (latestResult.isFinal) {
-                            // If the browser detects a definitive pause/end of sentence
                             HandleInput(myprompt);
                         } else {
-                            // Fallback timer for silence
                             silenceTimer = setTimeout(() => {
                                 if (myprompt.trim().length > 0) {
                                     HandleInput(myprompt);
                                 }
-                            }, 1500); // Wait 1.5s for silence
+                            }, 1500); 
                         }
                     };
 
                     recognition.onend = () => {
-                        // Only restart if we are NOT currently having the AI speak
                         if (!isSpeaking) {
                             try { recognition.start(); } catch(e) {}
                         } else {
                             document.getElementById('status').innerText = "Status: AI Speaking (Mic Paused)...";
-                            document.getElementById('status').style.backgroundColor = "#fff3cd"; // Yellowish
+                            document.getElementById('status').style.backgroundColor = "#fff3cd"; 
                         }
                     };
 
@@ -189,28 +263,21 @@
 
             function HandleInput(myprompt) {
                 if (typeof controller !== 'undefined') controller.abort();
-                
-                // Stop listening while we process and speak
                 isSpeaking = true;
                 recognition.stop(); 
-                
                 Go(myprompt);
             }
                     
             function Speak(text) {
                 return new Promise((resolve, reject) => {
                     const utterance = new SpeechSynthesisUtterance(text);
-                    
-                    // Select a voice (Optional: tries to pick a natural sounding one)
                     const voices = speechSynthesis.getVoices();
                     const preferredVoice = voices.find(v => v.name.includes("Google US English")) || voices[0];
                     if (preferredVoice) utterance.voice = preferredVoice;
 
-                    // IMPORTANT: Prevent Garbage Collection
                     window.utterances.push(utterance);
 
                     utterance.onend = () => {
-                        // Remove from array to free memory
                         window.utterances.shift();
                         resolve();
                     };
@@ -218,7 +285,7 @@
                     utterance.onerror = (e) => {
                         console.error("Speech error:", e);
                         window.utterances.shift();
-                        resolve(); // Resolve anyway to keep flow going
+                        resolve(); 
                     };
 
                     speechSynthesis.speak(utterance);
@@ -236,14 +303,12 @@
                 
                 await streamChatCompletion(conversationHistory, controller);
                 
-                // Finished streaming. 
-                // Wait a moment for any final speech queue to finish, then restart Mic.
                 let checkInterval = setInterval(() => {
                     if (!speechSynthesis.speaking && window.utterances.length === 0) {
                         clearInterval(checkInterval);
                         isSpeaking = false;
                         document.getElementById('prompt').innerText = "...";
-                        InitRecognition(); // Restart Mic
+                        InitRecognition(); 
                     }
                 }, 500);
             }
@@ -297,7 +362,6 @@
                         }
                     }
                     
-                    // Speak any remaining text in the buffer
                     if (speechtext.trim().length > 0) {
                         Speak(speechtext);
                         speechtext = "";
@@ -317,8 +381,6 @@
                 
                 speechtext += textChunk;
                 
-                // Split by sentence terminators to create natural pauses
-                // We regex for . ! ? followed by a space or end of string
                 if (/[.!?](\s|$)/.test(speechtext)) {
                     Speak(speechtext);
                     speechtext = "";
@@ -327,4 +389,3 @@
         </script>
     </body>
 </html>
-
